@@ -1,0 +1,46 @@
+[
+  {
+    "model": "scraper.task",
+    "pk": 1,
+    "fields": {
+      "id": 1,
+      "url": "https://unsplash.com/s/photos/web",
+      "status": "succeed",
+      "counter": 1,
+      "type": "image"
+    }
+  },
+  {
+    "model": "scraper.task",
+    "pk": 2,
+    "fields": {
+      "id": 2,
+      "url": "https://unsplash.com/s/photos/web",
+      "status": "succeed",
+      "counter": 1,
+      "type": "image"
+    }
+  },
+  {
+    "model": "scraper.task",
+    "pk": 3,
+    "fields": {
+      "id": 3,
+      "url": "https://django-mysql.readthedocs.io",
+      "status": "succeed",
+      "counter": 1,
+      "type": "image"
+    }
+  },
+  {
+    "model": "scraper.task",
+    "pk": 4,
+    "fields": {
+      "id": 4,
+      "url": "https://stackoverflow.com",
+      "status": "succeed",
+      "counter": 1,
+      "type": "image"
+    }
+  }
+]

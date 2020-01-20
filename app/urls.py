@@ -17,5 +17,5 @@ Including another URLconf
 from django.urls import path, include
 from django.conf.urls import url
 urlpatterns = [
-    url('api/v1/', include('scraper.urls'), name='api'),
+    url('api/v1/', include('scraper.urls')),
 ]

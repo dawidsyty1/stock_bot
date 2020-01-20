@@ -1,0 +1,80 @@
+[
+  {
+    "model": "scraper.resource",
+    "pk": 3,
+    "fields": {
+      "id": 3,
+      "site_name": "stackoverflow.com",
+      "file_name": "",
+      "path": "Not available",
+      "type": "image",
+      "status": "Error",
+      "task": 1
+    }
+  },
+  {
+    "model": "scraper.resource",
+    "pk": 4,
+    "fields": {
+      "id": 4,
+      "site_name": "stackoverflow.com",
+      "file_name": "public-qa.svg",
+      "path": "data/stackoverflow.com/image/public-qa.svg",
+      "type": "image",
+      "status": "Downloaded",
+      "task": 1
+    }
+  },
+  {
+    "model": "scraper.resource",
+    "pk": 5,
+    "fields": {
+      "id": 5,
+      "site_name": "stackoverflow.com",
+      "file_name": "private-qa.svg",
+      "path": "data/stackoverflow.com/image/private-qa.svg",
+      "type": "image",
+      "status": "Downloaded",
+      "task": 2
+    }
+  },
+  {
+    "model": "scraper.resource",
+    "pk": 6,
+    "fields": {
+      "id": 6,
+      "site_name": "stackoverflow.com",
+      "file_name": "jobs.svg",
+      "path": "data/stackoverflow.com/image/jobs.svg",
+      "type": "image",
+      "status": "Downloaded",
+      "task": 1
+    }
+  },
+  {
+    "model": "scraper.resource",
+    "pk": 7,
+    "fields": {
+      "id": 7,
+      "site_name": "stackoverflow.com",
+      "file_name": "private-questions.svg",
+      "path": "data/stackoverflow.com/image/private-questions.svg",
+      "type": "image",
+      "status": "Downloaded",
+      "task": 2
+    }
+  },
+  {
+    "model": "scraper.resource",
+    "pk": 8,
+    "fields": {
+      "id": 8,
+      "site_name": "stackoverflow.com",
+      "file_name": "find-candidate.svg",
+      "path": "data/stackoverflow.com/image/find-candidate.svg",
+      "type": "image",
+      "status": "Downloaded",
+      "task": 2
+    }
+  }
+]
