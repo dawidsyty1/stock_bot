@@ -12,10 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import datetime
-
-# import the logging library
 import logging
-
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -24,9 +21,28 @@ logging.basicConfig(
     format='%(asctime)s %(levelname)s %(message)s',
 )
 
-file_handler = logging.FileHandler('log/django.logs')
-file_handler.setLevel(logging.DEBUG)
-logger.addHandler(file_handler)
+try:
+    os.makedirs('logs/{}'.format(datetime.datetime.now().strftime('%Y-%m-%d')))
+except FileExistsError:
+    pass
+
+try:
+    os.makedirs('data')
+except FileExistsError:
+    pass
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.FileHandler(
+            'logs/{}/{}.log'.format(
+                datetime.datetime.now().strftime('%Y-%m-%d'), datetime.datetime.now().strftime('%H:%M:00')
+            ), mode='w'
+        ),
+        logging.StreamHandler()
+    ]
+)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,20 +53,21 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', None)
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'scraper',
+    'detector',
 ]
 
 MIDDLEWARE = [
@@ -124,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Warsaw'
 
 USE_I18N = True
 
@@ -146,5 +163,11 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = '{}/1'.format(BROKER_URL)
 CELERY_IGNORE_RESULT = True
 CELERY_STORE_ERRORS_EVEN_IF_IGNORED = True
-CELERY_IMPORTS = ('scraper.tasks',)
-ASYNCHRONOUS_ON = True
+CELERY_IMPORTS = ('detector.tasks',)
+# CELERYBEAT_SCHEDULE = {
+#     'update_database': {
+#         'task': 'detector.tasks.fetch_stock_data',
+#         'schedule': crontab(minute=(datetime.now().minute + 1) % 60),
+#     },
+# }
+

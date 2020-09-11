@@ -39,10 +39,12 @@ web:
   command: ./config/uwsgi/init.sh
 
 celery:
-  restart: always
+#  restart: always
   build: .
   dockerfile: Dockerfile
-  command: celery -A app worker -l info -f ./log/celery.log
+  environment:
+    - C_FORCE_ROOT=1
+  command: celery -A app.celery worker -B --loglevel=info
   volumes:
     - .:/usr/src/app
   env_file: config/env.secret
