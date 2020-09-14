@@ -49,7 +49,7 @@ def parse_response_data(serialized_response, hours_dictionary_average, symbol, p
 
 
 def parse_data(item):
-    reader = csv.reader(open(f'data/{item.symbol}_{item.resolution}_average.csv'))
+    reader = csv.reader(open(f'data/{item.symbol}_{item.time_resolution}_average.csv'))
 
     hours_dictionary_average = {
         row[0].split(' ')[1]: row[0].split(' ')[2]
@@ -62,7 +62,7 @@ def parse_data(item):
         task_force_get_data.delay(item)
         return
 
-    serialized_response = get_last_5_minutes_data(item.symbol, item.token, item.resolution)
+    serialized_response = get_last_5_minutes_data(item.symbol, item.token, item.time_resolution)
 
     if serialized_response == {}:
         logging.info('Error [{}] serialized response empty'.format(item.symbol))
