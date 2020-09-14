@@ -16,7 +16,7 @@ def task_us_get_data():
         get_data(item.symbol, item.token, item.time_resolution)
 
 
-@periodic_task(run_every=timedelta(seconds=600))
+@periodic_task(run_every=timedelta(seconds=60))
 def task_parse_data():
     time = datetime.now().time()
     for item in ActionSettings.objects.filter(enable=True, time_from__lte=time, time_to__gte=time):
