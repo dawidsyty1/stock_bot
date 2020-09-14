@@ -76,7 +76,7 @@ class BearDetectAdmin(admin.ModelAdmin):
 
 
 class ActionSettingsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'symbol', 'price_percenage', 'time_resolution')
+    list_display = ('name', 'symbol', 'volume_percenage', 'price_percenage', 'time_resolution', 'enable')
 
 
 admin.site.register(ActionSettings, ActionSettingsAdmin)
