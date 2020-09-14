@@ -75,5 +75,9 @@ class BearDetectAdmin(admin.ModelAdmin):
     readonly_fields = ('symbol', 'time', 'volume', 'max_volume', 'price_open', 'price_close')
 
 
-admin.site.register(ActionSettings)
+class ActionSettingsAdmin(admin.ModelAdmin):
+    list_display = ('name', 'symbol', 'price_percenage', 'time_resolution')
+
+
+admin.site.register(ActionSettings, ActionSettingsAdmin)
 admin.site.register(BearDetect, BearDetectAdmin)
