@@ -2,7 +2,7 @@ from fbchat import Client
 from fbchat.models import *
 
 USER = '+48723893528'
-PASSOWRD = 'bot12345'
+PASSOWRD = 'Bot12345!'
 
 client = Client(USER, PASSOWRD)
 

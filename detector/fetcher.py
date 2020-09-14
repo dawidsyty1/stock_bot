@@ -26,7 +26,7 @@ def get_data(symbol, token, resolution):
         logging.info('Error [{}] hours dictionary average empty'.format(symbol))
         return
 
-    with open(f'data/{symbol}_average.csv', 'w') as file:
+    with open(f'data/{symbol}_{resolution}_average.csv', 'w') as file:
         spamwriter = csv.writer(file, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         for index, (key, value) in enumerate(hours_dictionary_average.items()):
             spamwriter.writerow([index, key, value])

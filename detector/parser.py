@@ -42,14 +42,14 @@ def parse_response_data(serialized_response, hours_dictionary_average, symbol, p
                         price_close=serialized_response['c'][index],
                     )
                     bear.save()
-                    task_triger_move(bear, token)
+                    task_triger_move.delay(bear, token)
 
         except Exception as error:
             logging.info('Error {} {} {}'.format(error, type(error), symbol))
 
 
-def parse_data(symbol, token, resolution, volume_percenage):
-    reader = csv.reader(open(f'data/{symbol}_average.csv'))
+def parse_data(item):
+    reader = csv.reader(open(f'data/{item.symbol}_{item.resolution}_average.csv'))
 
     hours_dictionary_average = {
         row[0].split(' ')[1]: row[0].split(' ')[2]
@@ -57,20 +57,21 @@ def parse_data(symbol, token, resolution, volume_percenage):
     }
 
     if hours_dictionary_average == {}:
-        logging.info('Error [{}] hours dictionary average empty'.format(symbol))
-        # task_us_get_data()
+        from .tasks import task_force_get_data
+        logging.info('Error [{}] hours dictionary average empty'.format(item.symbol))
+        task_force_get_data.delay(item)
         return
 
-    serialized_response = get_last_5_minutes_data(symbol, token, resolution)
+    serialized_response = get_last_5_minutes_data(item.symbol, item.token, item.resolution)
 
     if serialized_response == {}:
-        logging.info('Error [{}] serialized response empty'.format(symbol))
+        logging.info('Error [{}] serialized response empty'.format(item.symbol))
         return
 
     try:
-        parse_response_data(serialized_response, hours_dictionary_average, symbol, volume_percenage, token)
+        parse_response_data(serialized_response, hours_dictionary_average, item.symbol, item.volume_percenage, item.token)
     except Exception as error:
-        logging.info('Exception {}: error {} symbol: {},'.format(type(error), error, symbol))
+        logging.info('Exception {}: error {} symbol: {},'.format(type(error), error, item.symbol))
 
 
 def triger_fb_message(bear, token):
