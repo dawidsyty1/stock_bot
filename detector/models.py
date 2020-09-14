@@ -56,13 +56,13 @@ class BearDetect(models.Model):
 
     time = models.TimeField(blank=True, null=True)
 
-    volume = models.FloatField()
+    volume = models.FloatField(blank=True, null=True)
 
-    max_volume = models.FloatField()
+    max_volume = models.FloatField(blank=True, null=True)
 
-    price_open = models.FloatField()
+    price_open = models.FloatField(blank=True, null=True)
 
-    price_close = models.FloatField()
+    price_close = models.FloatField(blank=True, null=True)
 
     price_percenage = models.IntegerField(default=0)
 
@@ -70,5 +70,10 @@ class BearDetect(models.Model):
         return f'{self.time}: {self.symbol} : {self.volume}'
 
 
+class BearDetectAdmin(admin.ModelAdmin):
+    list_display = ('symbol', 'time', 'volume', 'max_volume', 'price_open', 'price_close')
+    readonly_fields = ('symbol', 'time', 'volume', 'max_volume', 'price_open', 'price_close')
+
+
 admin.site.register(ActionSettings)
-admin.site.register(BearDetect)
+admin.site.register(BearDetect, BearDetectAdmin)
