@@ -41,7 +41,7 @@ def task_force_get_data(symbol, token, time_resolution):
 
 
 @app.task
-def task_triger_move(symbol, close_price, token, volume, max_volume, time):
-    if triger_fb_message(symbol, close_price, token):
-        send_message(time, symbol, volume, max_volume)
+def task_triger_move(symbol, close_price, token, volume, max_volume, time, bull_market):
+    if triger_fb_message(symbol, close_price, token, bull_market):
+        send_message(time, symbol, volume, max_volume, bull_market)
 

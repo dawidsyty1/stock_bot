@@ -30,8 +30,8 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
                 )
             )
             if volume > max_volume:
-                if item.bull and serialized_response['o'][index] < serialized_response['c'][index] or\
-                        not item.bull and serialized_response['o'][index] > serialized_response['c'][index]:
+                if item.bull_market and serialized_response['o'][index] < serialized_response['c'][index] or\
+                        not item.bull_market and serialized_response['o'][index] > serialized_response['c'][index]:
                     bear = BearDetect.objects.filter(
                         time=time_key, symbol=item.symbol, time_resolution=item.time_resolution
                     )
@@ -49,7 +49,7 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
                         )
                         bear.save()
                         task_triger_move.delay(
-                            item.symbol, serialized_response['c'][index], item.token, volume, max_volume, time_key
+                            item.symbol, serialized_response['c'][index], item.token, volume, max_volume, time_key, item.bull_market
                         )
 
         except Exception as error:
@@ -88,11 +88,15 @@ def parse_data(item):
         logging.info('Exception {}: error {} symbol: {},'.format(type(error), error, item.symbol))
 
 
-def triger_fb_message(symbol, close_price, token):
+def triger_fb_message(symbol, close_price, token, bull_market):
     if HISTORICAL_DATA:
         return True
 
     serialized_response = get_last_data(symbol, token)
-    if close_price > serialized_response['c']:
+
+    if not bull_market and close_price > serialized_response['c']:
+        return True
+
+    if bull_market and close_price < serialized_response['c']:
         return True
     return False
