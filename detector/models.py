@@ -43,6 +43,7 @@ class ActionSettings(models.Model):
     time_to = models.TimeField(blank=True, null=True)
 
     enable = models.BooleanField()
+    bull_market = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.name}: {self.symbol}'
@@ -62,6 +63,8 @@ class BearDetect(models.Model):
 
     price_open = models.FloatField(blank=True, null=True)
 
+    time_resolution = models.CharField(default=1, max_length=2, choices=RESOLUTION_CHOICES)
+
     price_close = models.FloatField(blank=True, null=True)
 
     price_percenage = models.IntegerField(default=0)
@@ -76,7 +79,7 @@ class BearDetectAdmin(admin.ModelAdmin):
 
 
 class ActionSettingsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'symbol', 'volume_percenage', 'price_percenage', 'time_resolution', 'enable')
+    list_display = ('name', 'symbol', 'volume_percenage', 'price_percenage', 'time_resolution', 'enable', 'bull_market')
 
 
 admin.site.register(ActionSettings, ActionSettingsAdmin)

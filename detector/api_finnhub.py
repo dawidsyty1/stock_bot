@@ -2,9 +2,7 @@ import json
 import logging
 import requests
 from datetime import datetime, timedelta
-
-BASE_URL_CANDLE = 'https://finnhub.io/api/v1/stock/candle'
-BASE_URL_QUOTE = 'https://finnhub.io/api/v1/stock/quote'
+from .const import BASE_URL_CANDLE, BASE_URL_QUOTE, HISTORICAL_DATA
 
 
 class REQUEST_PARAMETERS:
@@ -16,12 +14,16 @@ class REQUEST_PARAMETERS:
 
 
 def get_last_5_minutes_data(symbol, token, resolution):
+    from_date = (datetime.now() + timedelta(minutes=-int(resolution) * 2)).strftime('%s')
+    if HISTORICAL_DATA:
+        from_date = (datetime.now() + timedelta(days=-1, minutes=0)).strftime('%s')
+
     response = requests.get(
         BASE_URL_CANDLE,
         {
             REQUEST_PARAMETERS.SYMBOL: symbol,
             REQUEST_PARAMETERS.RESOLUTION: resolution,
-            REQUEST_PARAMETERS.FROM: (datetime.now() + timedelta(minutes=-int(resolution)*2)).strftime('%s'),
+            REQUEST_PARAMETERS.FROM: from_date,
             REQUEST_PARAMETERS.TO: datetime.now().replace(second=1).strftime('%s'),
             REQUEST_PARAMETERS.TOKEN: token,
         }
@@ -37,6 +39,10 @@ def get_last_5_minutes_data(symbol, token, resolution):
 
 
 def get_last_30_days_data(symbol, resolution, token):
+    to_date = (datetime.now() + timedelta(days=-1)).replace(second=0, hour=0, minute=1).strftime('%s')
+    if HISTORICAL_DATA:
+        to_date = (datetime.now() + timedelta(days=-2)).replace(second=0, hour=0, minute=1).strftime('%s')
+
     response = requests.get(
         BASE_URL_CANDLE,
         {
@@ -45,9 +51,7 @@ def get_last_30_days_data(symbol, resolution, token):
             REQUEST_PARAMETERS.FROM: (
                     datetime.now() + timedelta(days=-30)
             ).replace(second=0, hour=0, minute=1).strftime('%s'),
-            REQUEST_PARAMETERS.TO: (
-                    datetime.now() + timedelta(days=-1)
-            ).replace(second=0, hour=0, minute=1).strftime('%s'),
+            REQUEST_PARAMETERS.TO: to_date,
             REQUEST_PARAMETERS.TOKEN: token,
         }
     )
