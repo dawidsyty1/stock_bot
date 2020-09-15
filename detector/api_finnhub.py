@@ -65,6 +65,7 @@ def get_last_30_days_data(symbol, resolution, token):
 
 
 def get_last_data(symbol, token):
+    serialized_response = {}
     response = requests.get(
         BASE_URL_QUOTE,
         {
@@ -77,5 +78,4 @@ def get_last_data(symbol, token):
         serialized_response = response.json()
     except json.decoder.JSONDecodeError:
         logging.info('Exception JSONG: {}'.format(response.content))
-
     return serialized_response

@@ -94,6 +94,9 @@ def triger_fb_message(symbol, close_price, token, bull_market):
 
     serialized_response = get_last_data(symbol, token)
 
+    if serialized_response == {}:
+        return False
+
     if not bull_market and close_price > serialized_response['c']:
         return True
 
