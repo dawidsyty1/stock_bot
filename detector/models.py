@@ -90,8 +90,33 @@ class BearDetectAdmin(admin.ModelAdmin):
     readonly_fields = ('symbol', 'time', 'volume', 'max_volume', 'price_open', 'price_close')
 
 
+def disable_action(modeladmin, request, queryset):
+    queryset.update(enable=False)
+    short_description = "Disable all"
+
+
+def enable_action(modeladmin, request, queryset):
+    queryset.update(enable=True)
+    short_description = "Enable all"
+
+
+def set_percentage_volument_70_action(modeladmin, request, queryset):
+    queryset.update(volume_percenage=70)
+    short_description = "Set percentage volument 70"
+
+
+def set_percentage_volument_10_action(modeladmin, request, queryset):
+    queryset.update(volume_percenage=10)
+    short_description = "Set percentage volument 10"
+
+
 class ActionSettingsAdmin(admin.ModelAdmin):
     list_display = ('name', 'symbol', 'volume_percenage', 'price_percenage', 'time_resolution', 'enable', 'bull_market')
+    actions = [
+        disable_action, enable_action, set_percentage_volument_70_action, set_percentage_volument_10_action
+    ]
+
+
 
 
 admin.site.register(ActionSettings, ActionSettingsAdmin)
