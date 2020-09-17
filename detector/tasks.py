@@ -37,13 +37,16 @@ def task_parse_data():
 
 @app.task
 def task_force_get_data(item_id):
+    logging.info('task_force_get_data {}'.format(item_id))
     item = ActionSettings.objects.get(id=item_id)
+    logging.info('item {}'.format(item))
     if item:
         get_data(item)
 
 
 @app.task
 def task_triger_move(bear_id, item_id):
+    logging.info('task_triger_move {} {}'.format(bear_id, item_id))
     item = ActionSettings.objects.get(id=item_id)
     bear = BearDetect.objects.get(id=bear_id)
     if item and bear:

@@ -44,7 +44,7 @@ def get_last_5_minutes_data(item):
             REQUEST_PARAMETERS.TOKEN: item.token,
         }
     )
-
+    logging.info('get_last_5_minutes_data {}'.format(response.request.url))
     serialized_response = {}
 
     try:
@@ -60,6 +60,7 @@ def get_last_30_days_data(item):
         to_date = (datetime.now() + timedelta(days=-2)).replace(second=0, hour=0, minute=1).strftime('%s')
 
     base_url = candle_url(item.stock_type)
+    days_from = 15 if item.stock_type == StockType.FOREX else 30
 
     response = requests.get(
         base_url,
@@ -67,17 +68,18 @@ def get_last_30_days_data(item):
             REQUEST_PARAMETERS.SYMBOL: item.symbol,
             REQUEST_PARAMETERS.RESOLUTION: item.time_resolution,
             REQUEST_PARAMETERS.FROM: (
-                    datetime.now() + timedelta(days=-30)
+                    datetime.now() + timedelta(days=-days_from)
             ).replace(second=0, hour=0, minute=1).strftime('%s'),
             REQUEST_PARAMETERS.TO: to_date,
             REQUEST_PARAMETERS.TOKEN: item.token,
         }
     )
+    logging.info('get_last_30_days_data {}'.format(response.request.url))
 
     try:
         serialized_response = response.json()
     except json.decoder.JSONDecodeError:
-        logging.info('Exception JSONG: {}'.format(response.content))
+        logging.info('Exception JSONG: {}'.format(response.request.url))
 
     return serialized_response
 

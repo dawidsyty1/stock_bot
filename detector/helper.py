@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 
 
@@ -21,7 +22,6 @@ class REQUEST_PARAMETERS:
 
 
 def to_hours_dictionary(serialized_response, filter=True):
-
     hours_dictionary = {
         datetime.fromtimestamp(timestamp).strftime(TIME_FORMAT): []
         for index, timestamp in enumerate(serialized_response['t'])
