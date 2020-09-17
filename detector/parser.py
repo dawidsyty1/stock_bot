@@ -95,11 +95,4 @@ def fetch_current_price(item):
     if serialized_response == {}:
         return None
 
-    logging.info('serialized_response {} close_price: {} bull_market:{}'.format(serialized_response['c'], close_price, bull_market))
-
-    if not item.bull_market and item.close_price > serialized_response['c']:
-        return serialized_response['c']
-
-    if item.bull_market and item.close_price < serialized_response['c']:
-        return serialized_response['c']
-    return None
+    return serialized_response['c']

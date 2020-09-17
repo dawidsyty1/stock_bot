@@ -15,7 +15,7 @@ RESOLUTION_CHOICES = (
 
 class StockType(object):
     STOCK = '1'
-    FOREXT = '2'
+    FOREX = '2'
     CRYPTO = '3'
 
     CHOICES = (
