@@ -14,14 +14,14 @@ from .api_fbchat import send_message
 def task_us_get_data():
     if HISTORICAL_DATA:
         for item in ActionSettings.objects.filter(enable=True):
-            get_data(item.symbol, item.token, item.time_resolution)
+            get_data(item)
     else:
         time = datetime.now().time()
         for item in ActionSettings.objects.filter(enable=True, time_from__lte=time, time_to__gte=time):
             BearDetect.objects.filter(
                 symbol=item.symbol, time_resolution=item.time_resolution
             ).delete()
-            get_data(item.symbol, item.token, item.time_resolution)
+            get_data(item)
 
 
 @periodic_task(run_every=timedelta(seconds=60))
@@ -36,12 +36,17 @@ def task_parse_data():
 
 
 @app.task
-def task_force_get_data(symbol, token, time_resolution):
-    get_data(symbol, token, time_resolution)
+def task_force_get_data(item_id):
+    item = ActionSettings.objects.get(id=item_id)
+    if item:
+        get_data(item)
 
 
 @app.task
-def task_triger_move(symbol, close_price, token, volume, max_volume, time, bull_market):
-    current_price = fetch_current_price(symbol, close_price, token, bull_market)
-    send_message(time, symbol, volume, max_volume, bull_market, current_price)
+def task_triger_move(bear_id, item_id):
+    item = ActionSettings.objects.get(id=item_id)
+    bear = BearDetect.objects.get(id=bear_id)
+    if item and bear:
+        current_price = fetch_current_price(item)
+        send_message(bear, item, current_price)
 

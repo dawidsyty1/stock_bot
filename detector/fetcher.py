@@ -4,17 +4,17 @@ from .helper import to_hours_dictionary, fast_average
 from .api_finnhub import get_last_30_days_data
 
 
-def get_data(symbol, token, resolution):
-    serialized_response = get_last_30_days_data(symbol, resolution, token)
+def get_data(item):
+    serialized_response = get_last_30_days_data(item)
 
     if serialized_response == {}:
-        logging.info('Error [{}] serialized response empty'.format(symbol))
+        logging.info('Error [{}] serialized response empty'.format(item.symbol))
         return
 
     try:
         hours_dictionary = to_hours_dictionary(serialized_response)
     except Exception as error:
-        logging.info('Exception {}: Symbol: {}, error {}'.format(type(error), symbol, error))
+        logging.info('Exception {}: Symbol: {}, error {}'.format(type(error), item.symbol, error))
         return
 
     hours_dictionary_average = {
@@ -23,10 +23,10 @@ def get_data(symbol, token, resolution):
     }
 
     if hours_dictionary_average == {}:
-        logging.info('Error [{}] hours dictionary average empty'.format(symbol))
+        logging.info('Error [{}] hours dictionary average empty'.format(item.symbol))
         return
 
-    with open(f'data/{symbol}_{resolution}_average.csv', 'w') as file:
+    with open(f'data/{item.symbol}_{item.resolution}_average.csv', 'w') as file:
         spamwriter = csv.writer(file, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         for index, (key, value) in enumerate(hours_dictionary_average.items()):
             spamwriter.writerow([index, key, value])

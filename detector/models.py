@@ -13,6 +13,18 @@ RESOLUTION_CHOICES = (
     )
 
 
+class StockType(object):
+    STOCK = '1'
+    FOREXT = '2'
+    CRYPTO = '3'
+
+    CHOICES = (
+        ('1', 'Stock'),
+        ('2', 'Forex'),
+        ('3', 'Crypto'),
+    )
+
+
 class ActionSettings(models.Model):
     name = models.CharField(
         max_length=20,
@@ -41,7 +53,7 @@ class ActionSettings(models.Model):
     time_resolution = models.CharField(default=1, max_length=2, choices=RESOLUTION_CHOICES)
     time_from = models.TimeField(blank=True, null=True)
     time_to = models.TimeField(blank=True, null=True)
-
+    stock_type = models.CharField(default='1', max_length=1, choices=StockType.CHOICES)
     enable = models.BooleanField()
     bull_market = models.BooleanField(default=False)
 

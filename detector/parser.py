@@ -48,9 +48,7 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
                             price_close=serialized_response['c'][index],
                         )
                         bear.save()
-                        task_triger_move.delay(
-                            item.symbol, serialized_response['c'][index], item.token, volume, max_volume, time_key, item.bull_market
-                        )
+                        task_triger_move.delay(bear.id, item.id)
 
         except Exception as error:
             logging.info('Error {} {} {}'.format(error, type(error), item.symbol))
@@ -62,7 +60,7 @@ def parse_data(item):
     except FileNotFoundError:
         from .tasks import task_force_get_data
         logging.info('Error [{}] hours dictionary average empty'.format(item.symbol))
-        task_force_get_data.delay(item.symbol, item.token, item.time_resolution)
+        task_force_get_data.delay(item.id)
         return
 
     hours_dictionary_average = {
@@ -74,7 +72,7 @@ def parse_data(item):
         logging.info('Error [{}] hours dictionary average empty'.format(item.symbol))
         return
 
-    serialized_response = get_last_5_minutes_data(item.symbol, item.token, item.time_resolution)
+    serialized_response = get_last_5_minutes_data(item)
 
     if serialized_response == {}:
         logging.info('Error [{}] serialized response empty'.format(item.symbol))
@@ -88,20 +86,20 @@ def parse_data(item):
         logging.info('Exception {}: error {} symbol: {},'.format(type(error), error, item.symbol))
 
 
-def fetch_current_price(symbol, close_price, token, bull_market):
+def fetch_current_price(item):
     if HISTORICAL_DATA:
         return None
 
-    serialized_response = get_last_data(symbol, token)
+    serialized_response = get_last_data(item)
 
     if serialized_response == {}:
         return None
 
     logging.info('serialized_response {} close_price: {} bull_market:{}'.format(serialized_response['c'], close_price, bull_market))
 
-    if not bull_market and close_price > serialized_response['c']:
+    if not item.bull_market and item.close_price > serialized_response['c']:
         return serialized_response['c']
 
-    if bull_market and close_price < serialized_response['c']:
+    if item.bull_market and item.close_price < serialized_response['c']:
         return serialized_response['c']
     return None
