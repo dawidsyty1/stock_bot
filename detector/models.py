@@ -126,12 +126,10 @@ def disable_bull_market_action(modeladmin, request, queryset):
 
 
 class ActionSettingsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'symbol', 'volume_percenage', 'price_percenage', 'time_resolution', 'enable', 'bull_market')
+    list_display = ('name', 'symbol', 'volume_percenage', 'price_percenage', 'token', 'time_resolution', 'enable', 'bull_market')
     actions = [
         disable_action, enable_action, set_percentage_volument_70_action, set_percentage_volument_10_action, set_percentage_volument_50_action
     ]
-
-
 
 
 admin.site.register(ActionSettings, ActionSettingsAdmin)
