@@ -110,6 +110,16 @@ def set_percentage_volument_10_action(modeladmin, request, queryset):
     short_description = "Set percentage volument 10"
 
 
+def enable_bull_market_action(modeladmin, request, queryset):
+    queryset.update(bull_market=True)
+    short_description = "Enable bull market"
+
+
+def disable_bull_market_action(modeladmin, request, queryset):
+    queryset.update(bull_market=False)
+    short_description = "Disable bull market"
+
+
 class ActionSettingsAdmin(admin.ModelAdmin):
     list_display = ('name', 'symbol', 'volume_percenage', 'price_percenage', 'time_resolution', 'enable', 'bull_market')
     actions = [
