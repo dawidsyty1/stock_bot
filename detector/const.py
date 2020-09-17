@@ -13,4 +13,4 @@ BASE_URL_FOREX_QUOTE = 'https://finnhub.io/api/v1/forex/quote'
 BASE_URL_CRYPTO_CANDLE = 'https://finnhub.io/api/v1/forex/candle'
 BASE_URL_CRYPTO_QUOTE = 'https://finnhub.io/api/v1/forex/quote'
 
-HISTORICAL_DATA = True
+HISTORICAL_DATA = False
