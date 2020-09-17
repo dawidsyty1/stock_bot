@@ -22,6 +22,7 @@ class REQUEST_PARAMETERS:
 
 
 def to_hours_dictionary(serialized_response, filter=True):
+
     hours_dictionary = {
         datetime.fromtimestamp(timestamp).strftime(TIME_FORMAT): []
         for index, timestamp in enumerate(serialized_response['t'])
@@ -30,7 +31,6 @@ def to_hours_dictionary(serialized_response, filter=True):
     for index, timestamp in enumerate(serialized_response['t']):
         key_time = datetime.fromtimestamp(timestamp).strftime(TIME_FORMAT)
         hours_dictionary[key_time].append(serialized_response['v'][index])
-
     if filter:
         hours_dictionary = {
             key: value

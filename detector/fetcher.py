@@ -2,6 +2,7 @@ import logging
 import csv
 from .helper import to_hours_dictionary, fast_average
 from .api_finnhub import get_last_30_days_data
+from .models import StockType
 
 
 def get_data(item):
@@ -12,7 +13,8 @@ def get_data(item):
         return
 
     try:
-        hours_dictionary = to_hours_dictionary(serialized_response)
+        _filter = False if item.stock_type == StockType.FOREX or item.stock_type == StockType.CRYPTO else True
+        hours_dictionary = to_hours_dictionary(serialized_response, _filter)
     except Exception as error:
         logging.info('Exception {}: Symbol: {}, error {}'.format(type(error), item.symbol, error))
         return
