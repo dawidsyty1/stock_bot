@@ -88,20 +88,20 @@ def parse_data(item):
         logging.info('Exception {}: error {} symbol: {},'.format(type(error), error, item.symbol))
 
 
-def triger_fb_message(symbol, close_price, token, bull_market):
+def fetch_current_price(symbol, close_price, token, bull_market):
     if HISTORICAL_DATA:
-        return True
+        return None
 
     serialized_response = get_last_data(symbol, token)
 
     if serialized_response == {}:
-        return False
+        return None
 
     logging.info('serialized_response {} close_price: {} bull_market:{}'.format(serialized_response['c'], close_price, bull_market))
 
     if not bull_market and close_price > serialized_response['c']:
-        return True
+        return serialized_response['c']
 
     if bull_market and close_price < serialized_response['c']:
-        return True
-    return False
+        return serialized_response['c']
+    return None

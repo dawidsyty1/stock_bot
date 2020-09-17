@@ -77,5 +77,5 @@ def get_last_data(symbol, token):
     try:
         serialized_response = response.json()
     except json.decoder.JSONDecodeError:
-        logging.info('Exception JSONG: {}'.format(response.content))
+        logging.info('Exception JSON: {}'.format(response.request.url))
     return serialized_response

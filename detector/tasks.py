@@ -5,7 +5,7 @@ from celery.decorators import periodic_task
 from celery.schedules import crontab
 from detector.models import ActionSettings, BearDetect
 from .const import HISTORICAL_DATA
-from .parser import parse_data, triger_fb_message
+from .parser import parse_data, fetch_current_price
 from .fetcher import get_data
 from .api_fbchat import send_message
 
@@ -42,7 +42,6 @@ def task_force_get_data(symbol, token, time_resolution):
 
 @app.task
 def task_triger_move(symbol, close_price, token, volume, max_volume, time, bull_market):
-    logging.info('task_triger_move for {}, close_price {} volume {}, max_volume {}'.format(symbol, close_price, volume, max_volume))
-    if triger_fb_message(symbol, close_price, token, bull_market):
-        send_message(time, symbol, volume, max_volume, bull_market)
+    current_price = fetch_current_price(symbol, close_price, token, bull_market)
+    send_message(time, symbol, volume, max_volume, bull_market, current_price)
 
