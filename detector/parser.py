@@ -60,7 +60,11 @@ def parse_data(item):
     except FileNotFoundError:
         from .tasks import task_force_get_data
         logging.info('Error [{}] hours dictionary average empty'.format(item.symbol))
-        task_force_get_data.delay(item.id)
+
+        if item.forced == False:
+            item.forced = True
+            item.save()
+            task_force_get_data.delay(item.id)
         return
 
     hours_dictionary_average = {
