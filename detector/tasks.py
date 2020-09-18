@@ -147,4 +147,4 @@ def task_parse_data():
     else:
         time = datetime.now().time()
         for item in ActionSettings.objects.filter(enable=True, time_from__lte=time, time_to__gte=time):
-            task_triger_parse_data_for.apply_async(item.id)
+            task_triger_parse_data_for.delay(item.id)
