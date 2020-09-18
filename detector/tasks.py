@@ -81,11 +81,11 @@ def task_delete_all_data():
 @app.task
 def task_triger_move(bear_id, item_id):
     logging.info('task_triger_move {} {}'.format(bear_id, item_id))
-    item = ActionSettings.objects.get(id=item_id)
-    bear = BearDetect.objects.get(id=bear_id)
-    if item and bear:
-        current_price = fetch_current_price(item)
-        send_message(bear, item, current_price)
+    # item = ActionSettings.objects.get(id=item_id)
+    # bear = BearDetect.objects.get(id=bear_id)
+    # if item and bear:
+    #     current_price = fetch_current_price(item)
+    #     send_message(bear, item, current_price)
 
 
 @periodic_task(run_every=crontab(hour=1, minute=00))
@@ -147,4 +147,4 @@ def task_parse_data():
     else:
         time = datetime.now().time()
         for item in ActionSettings.objects.filter(enable=True, time_from__lte=time, time_to__gte=time):
-            task_triger_parse_data_for.delay(item.id)
+            task_triger_parse_data_for.apply_async(item.id)
