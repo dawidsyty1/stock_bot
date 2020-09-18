@@ -66,22 +66,37 @@ def task_us_get_data():
 
 @periodic_task(run_every=crontab(hour=1, minute=00))
 def task_update_action_list():
+    def validator_description(description, symbol):
+        return description if description != '' else symbol
+
+    time_from = datetime.now().replace(second=0, hour=15, minute=30).time()
+    time_to = datetime.now().replace(second=0, hour=22, minute=00).time()
+
     for item in list_stock_data():
         object, created = ActionSettings.objects.get_or_create(symbol=item['symbol'])
-        object.name = item['description']
+        object.name = validator_description(item['description'], item['symbol'])
         object.stock_type = StockType.STOCK
+        object.time_from = time_from
+        object.time_to = time_to
         object.save()
+
+    time_from = datetime.now().replace(second=0, hour=1, minute=00).time()
+    time_to = datetime.now().replace(second=0, hour=23, minute=00).time()
 
     for item in list_forex_data():
         object, created = ActionSettings.objects.get_or_create(symbol=item['symbol'])
-        object.name = item['description']
+        object.name = validator_description(item['description'], item['symbol'])
         object.stock_type = StockType.FOREX
+        object.time_from = time_from
+        object.time_to = time_to
         object.save()
 
     for item in list_crypto_data():
         object, created = ActionSettings.objects.get_or_create(symbol=item['symbol'])
-        object.name = item['description']
+        object.name = validator_description(item['description'], item['symbol'])
         object.stock_type = StockType.CRYPTO
+        object.time_from = time_from
+        object.time_to = time_to
         object.save()
 
 
