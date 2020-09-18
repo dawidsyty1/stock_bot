@@ -27,17 +27,17 @@ class StockType(object):
 
 class ActionSettings(models.Model):
     name = models.CharField(
-        max_length=20,
+        max_length=50,
         default='',
     )
 
     symbol = models.CharField(
-        max_length=20,
+        max_length=50,
         default='',
     )
 
     family = models.CharField(
-        max_length=20,
+        max_length=50,
         default='',
     )
 
@@ -54,7 +54,7 @@ class ActionSettings(models.Model):
     time_from = models.TimeField(blank=True, null=True)
     time_to = models.TimeField(blank=True, null=True)
     stock_type = models.CharField(default='1', max_length=1, choices=StockType.CHOICES)
-    enable = models.BooleanField()
+    enable = models.BooleanField(default=False)
     bull_market = models.BooleanField(default=False)
 
     def __str__(self):
@@ -126,10 +126,11 @@ def disable_bull_market_action(modeladmin, request, queryset):
 
 
 class ActionSettingsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'symbol', 'volume_percenage', 'price_percenage', 'token', 'time_resolution', 'enable', 'bull_market')
+    list_display = ('name', 'symbol', 'stock_type', 'volume_percenage', 'price_percenage', 'token', 'time_resolution', 'enable', 'bull_market')
     actions = [
         disable_action, enable_action, set_percentage_volument_70_action, set_percentage_volument_10_action, set_percentage_volument_50_action
     ]
+    search_fields = ('name', 'symbol')
 
 
 admin.site.register(ActionSettings, ActionSettingsAdmin)

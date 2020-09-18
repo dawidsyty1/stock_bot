@@ -2,12 +2,23 @@ import json
 import logging
 import requests
 from datetime import datetime, timedelta
-from .const import BASE_URL_CANDLE, BASE_URL_QUOTE, HISTORICAL_DATA, BASE_URL_FOREX_CANDLE, BASE_URL_CRYPTO_CANDLE
+from .const import (
+    BASE_URL_CANDLE,
+    BASE_URL_QUOTE,
+    HISTORICAL_DATA,
+    BASE_URL_FOREX_CANDLE,
+    BASE_URL_CRYPTO_CANDLE,
+    TOKEN,
+    DETECTOR_STOCK_SYMBOLS,
+    DETECTOR_FOREX_SYMBOLS,
+    DETECTOR_CRYPTO_SYMBOLS
+)
 from .models import StockType
 
 
 class REQUEST_PARAMETERS:
     SYMBOL = 'symbol'
+    EXCHANGE = 'exchange'
     TOKEN = 'token'
     FROM = 'from'
     TO = 'to'
@@ -102,3 +113,48 @@ def get_last_data(item):
     except json.decoder.JSONDecodeError:
         logging.info('Exception JSON: {}'.format(response.request.url))
     return serialized_response
+
+
+def list_stock_data(exchange='us'):
+    response = requests.get(
+        DETECTOR_STOCK_SYMBOLS,
+        {
+            REQUEST_PARAMETERS.EXCHANGE: exchange,
+            REQUEST_PARAMETERS.TOKEN: TOKEN,
+        }
+    )
+    try:
+        return response.json()
+    except json.decoder.JSONDecodeError:
+        logging.info('list_stock_data: {}'.format(response.request.url))
+    return []
+
+
+def list_crypto_data(exchange='binance'):
+    response = requests.get(
+        DETECTOR_CRYPTO_SYMBOLS,
+        {
+            REQUEST_PARAMETERS.EXCHANGE: exchange,
+            REQUEST_PARAMETERS.TOKEN: TOKEN,
+        }
+    )
+    try:
+        return response.json()
+    except json.decoder.JSONDecodeError:
+        logging.info('list_stock_data: {}'.format(response.request.url))
+    return []
+
+
+def list_forex_data(exchange='oanda'):
+    response = requests.get(
+        DETECTOR_FOREX_SYMBOLS,
+        {
+            REQUEST_PARAMETERS.EXCHANGE: exchange,
+            REQUEST_PARAMETERS.TOKEN: TOKEN,
+        }
+    )
+    try:
+        return response.json()
+    except json.decoder.JSONDecodeError:
+        logging.info('list_forex_data: {}'.format(response.request.url))
+    return []

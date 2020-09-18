@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 BASE_URL = 'https://finnhub.io/api/v1/stock/candle'
@@ -61,3 +61,12 @@ def percenage(value, percenage_value):
 def fast_average(values):
     return sum(int(i) for i in values) / len(values)
 
+
+def synchronize_time():
+    import time
+    logging.info('before {}'.format(datetime.now()))
+    time.sleep(
+        ((timedelta(minutes=1) + datetime.now()).replace(
+            second=1) - datetime.now()).total_seconds()
+    )
+    logging.info('after {}'.format(datetime.now()))
