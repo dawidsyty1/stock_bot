@@ -14,7 +14,7 @@ def get_data(item):
 
     try:
         _filter = False if item.stock_type == StockType.FOREX or item.stock_type == StockType.CRYPTO else True
-        hours_dictionary = to_hours_dictionary(serialized_response, _filter)
+        hours_dictionary = to_hours_dictionary(serialized_response, False)
     except Exception as error:
         logging.info('Exception {}: Symbol: {}, error {}'.format(type(error), item.symbol, error))
         return
