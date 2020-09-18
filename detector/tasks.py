@@ -53,7 +53,7 @@ def task_set_tokens_from_file():
 @app.task
 def task_enable_from_file():
     try:
-        reader = csv.reader(open('config/data_config/nasdaq_companies.csv'))
+        reader = csv.reader(open('config/data_config/nasdaq_etoro_companies.csv'))
     except FileNotFoundError:
         logging.info('task_set_tokens_from_file'.format())
 

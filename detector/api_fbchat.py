@@ -5,10 +5,10 @@ from fbchat.models import *
 USER = '+48723893528'
 PASSOWRD = 'Bot12345!'
 
-client = Client(USER, PASSOWRD)
 
 def send_message(bear, item, current_price):
     try:
+        client = Client(USER, PASSOWRD)
         if not client.isLoggedIn():
             client.login(USER, PASSOWRD)
         current_price = current_price if current_price is not None else ''
