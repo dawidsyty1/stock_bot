@@ -141,7 +141,14 @@ def clear_tokens(modeladmin, request, queryset):
 
 
 class ActionSettingsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'symbol', 'stock_type', 'volume_percenage', 'price_percenage', 'token', 'time_resolution', 'enable', 'bull_market')
+    list_display = (
+        'id', 'name',
+        'symbol', 'stock_type',
+        'volume_percenage', 'price_percenage',
+        'token', 'time_resolution',
+        'enable', 'bull_market',
+        'csv_file'
+    )
     actions = [
         disable_action,
         enable_action,
