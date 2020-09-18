@@ -140,6 +140,26 @@ def clear_tokens(modeladmin, request, queryset):
     short_description = "Clear all tokens"
 
 
+def set_time_1_action(modeladmin, request, queryset):
+    queryset.update(time_resolution='1')
+    short_description = "set_time_1_action"
+
+
+def set_time_5_action(modeladmin, request, queryset):
+    queryset.update(time_resolution='5')
+    short_description = "set_time_5_action"
+
+
+def set_time_15_action(modeladmin, request, queryset):
+    queryset.update(time_resolution='15')
+    short_description = "set_time_15_action"
+
+
+def set_time_60_action(modeladmin, request, queryset):
+    queryset.update(time_resolution='60')
+    short_description = "set_time_60_action"
+
+
 class ActionSettingsAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'name',
@@ -152,6 +172,10 @@ class ActionSettingsAdmin(admin.ModelAdmin):
     actions = [
         disable_action,
         enable_action,
+        set_time_1_action,
+        set_time_5_action,
+        set_time_15_action,
+        set_time_60_action,
         set_percentage_volument_70_action,
         set_percentage_volument_10_action,
         set_percentage_volument_50_action,
