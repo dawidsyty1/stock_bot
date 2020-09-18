@@ -56,7 +56,7 @@ class ActionSettings(models.Model):
     stock_type = models.CharField(default='1', max_length=1, choices=StockType.CHOICES)
     enable = models.BooleanField(default=False)
     bull_market = models.BooleanField(default=False)
-    csv_file = models.FileField(upload_to='documents', default='')
+    csv_file = models.FileField(upload_to='documents', default='', blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}: {self.symbol}'
