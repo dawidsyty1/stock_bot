@@ -100,7 +100,7 @@ def task_us_get_data():
                 symbol=item.symbol, time_resolution=item.time_resolution
             ).delete()
             task_delete_all_data.delay()
-            get_data(item)
+            task_force_get_data.apply_async(args=(item.id,))
 
 
 @periodic_task(run_every=crontab(hour=1, minute=00))
@@ -148,4 +148,4 @@ def task_parse_data():
     else:
         time = datetime.now().time()
         for item in ActionSettings.objects.filter(enable=True, time_from__lte=time, time_to__gte=time):
-            task_triger_parse_data_for.delay(item.id)
+            task_triger_parse_data_for.apply_async(args=(item.id,))
