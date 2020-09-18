@@ -34,16 +34,19 @@ class ActionSettings(models.Model):
     symbol = models.CharField(
         max_length=50,
         default='',
+        blank=True, null=True
     )
 
     family = models.CharField(
         max_length=50,
         default='',
+        blank=True, null=True
     )
 
     token = models.CharField(
         max_length=50,
         default='',
+        blank=True, null=True
     )
 
     volume_percenage = models.IntegerField(default=0)
@@ -126,10 +129,20 @@ def disable_bull_market_action(modeladmin, request, queryset):
     short_description = "Disable bull market"
 
 
+def clear_tokens(modeladmin, request, queryset):
+    queryset.update(token='')
+    short_description = "Clear all tokens"
+
+
 class ActionSettingsAdmin(admin.ModelAdmin):
     list_display = ('name', 'symbol', 'stock_type', 'volume_percenage', 'price_percenage', 'token', 'time_resolution', 'enable', 'bull_market')
     actions = [
-        disable_action, enable_action, set_percentage_volument_70_action, set_percentage_volument_10_action, set_percentage_volument_50_action
+        disable_action,
+        enable_action,
+        set_percentage_volument_70_action,
+        set_percentage_volument_10_action,
+        set_percentage_volument_50_action,
+        clear_tokens
     ]
     search_fields = ('name', 'symbol')
 

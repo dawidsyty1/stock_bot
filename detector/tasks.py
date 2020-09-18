@@ -1,10 +1,11 @@
 import logging
+import csv
 from datetime import timedelta, datetime
 from app.celery import app
 from celery.decorators import periodic_task
 from celery.schedules import crontab
 from detector.models import ActionSettings, BearDetect, StockType
-from .const import HISTORICAL_DATA
+from .const import HISTORICAL_DATA, MAX_NUMBERS_PER_TOKEN
 from .parser import parse_data, fetch_current_price
 from .fetcher import get_data
 from .api_fbchat import send_message
@@ -25,6 +26,43 @@ def task_force_get_data(item_id):
     logging.info('item {}'.format(item))
     if item:
         get_data(item)
+
+
+@app.task
+def task_set_tokens_from_file():
+    try:
+        reader = csv.reader(open('config/data_config/finnhub_accounts.csv'))
+    except FileNotFoundError:
+        logging.info('task_set_tokens_from_file')
+
+        return
+
+    tokens = [row[0].split(':')[1] for row in reader]
+    logging.info('tokens {}'.format(tokens))
+    counter = 0
+    row = 0
+    for item in ActionSettings.objects.filter(enable=True):
+        if counter > MAX_NUMBERS_PER_TOKEN:
+            counter = 0
+            row = row + 1
+        item.token = tokens[row]
+        counter = counter + 1
+        item.save()
+
+
+@app.task
+def task_enable_from_file():
+    try:
+        reader = csv.reader(open('config/data_config/nasdaq_companies.csv'))
+    except FileNotFoundError:
+        logging.info('task_set_tokens_from_file'.format())
+
+        return
+
+    symbols = [row[0] for row in reader]
+    for item in ActionSettings.objects.filter(symbol__in=symbols):
+        item.enable = True
+        item.save()
 
 
 @app.task

@@ -20,3 +20,5 @@ DETECTOR_FOREX_SYMBOLS = 'https://finnhub.io/api/v1/forex/symbol'
 DETECTOR_CRYPTO_SYMBOLS = 'https://finnhub.io/api/v1/crypto/symbol'
 
 HISTORICAL_DATA = False
+
+MAX_NUMBERS_PER_TOKEN = 40
