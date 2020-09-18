@@ -130,7 +130,10 @@ class ActionSettingsAdmin(admin.ModelAdmin):
     actions = [
         disable_action, enable_action, set_percentage_volument_70_action, set_percentage_volument_10_action, set_percentage_volument_50_action
     ]
-    search_fields = ('name', 'symbol', 'stock_type')
+    search_fields = ('name', 'symbol')
+
+    list_display = ('stock_type', 'time_resolution', 'enable', 'bull_market')
+    list_filter = ('stock_type', 'time_resolution', 'enable', 'bull_market')
 
 
 admin.site.register(ActionSettings, ActionSettingsAdmin)
