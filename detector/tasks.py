@@ -95,11 +95,11 @@ def task_us_get_data():
         for item in ActionSettings.objects.filter(enable=True):
             get_data(item)
     else:
+        task_delete_all_data.delay()
         for item in ActionSettings.objects.filter(enable=True):
             BearDetect.objects.filter(
                 symbol=item.symbol, time_resolution=item.time_resolution
             ).delete()
-            task_delete_all_data.delay()
             task_force_get_data.apply_async(args=(item.id,))
 
 
