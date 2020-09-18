@@ -15,6 +15,7 @@ from .helper import synchronize_time
 
 @app.task
 def task_triger_parse_data_for(item_id):
+    logging.info('task_triger_parse_data_for {}'.format(item_id))
     item = ActionSettings.objects.get(id=item_id)
     if item:
         parse_data(item)
