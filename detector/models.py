@@ -151,9 +151,9 @@ class ActionSettingsAdmin(admin.ModelAdmin):
         set_percentage_volument_100_action,
         clear_tokens
     ]
-    search_fields = ('name', 'symbol')
+    search_fields = ('id', 'name', 'symbol')
 
-    list_filter = ('id', 'stock_type', 'time_resolution', 'enable', 'bull_market', 'forced')
+    list_filter = ('stock_type', 'time_resolution', 'enable', 'bull_market', 'forced')
 
 
 admin.site.register(ActionSettings, ActionSettingsAdmin)
