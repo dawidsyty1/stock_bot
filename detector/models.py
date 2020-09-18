@@ -132,7 +132,6 @@ class ActionSettingsAdmin(admin.ModelAdmin):
     ]
     search_fields = ('name', 'symbol')
 
-    list_display = ('stock_type', 'time_resolution', 'enable', 'bull_market')
     list_filter = ('stock_type', 'time_resolution', 'enable', 'bull_market')
 
 
