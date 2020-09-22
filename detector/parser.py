@@ -40,7 +40,8 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
                         from .tasks import task_triger_move
                         bear = BearDetect(
                             time=time_key,
-                            symbol=item.name,
+                            symbol=item.symbol,
+                            name=item.name,
                             volume=str(volume),
                             max_volume=str(max_volume),
                             time_resolution=item.time_resolution,

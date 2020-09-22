@@ -72,6 +72,11 @@ class BearDetect(models.Model):
         default='',
     )
 
+    name = models.CharField(
+        max_length=50,
+        default='',
+    )
+
     time = models.TimeField(blank=True, null=True)
 
     volume = models.FloatField(blank=True, null=True)
@@ -91,8 +96,8 @@ class BearDetect(models.Model):
 
 
 class BearDetectAdmin(admin.ModelAdmin):
-    list_display = ('symbol', 'time', 'volume', 'max_volume', 'price_open', 'price_close')
-    readonly_fields = ('symbol', 'time', 'volume', 'max_volume', 'price_open', 'price_close')
+    list_display = ('name', 'symbol', 'time', 'volume', 'max_volume', 'price_open', 'price_close')
+    readonly_fields = ('name', 'symbol', 'time', 'volume', 'max_volume', 'price_open', 'price_close')
 
 
 def disable_action(modeladmin, request, queryset):
