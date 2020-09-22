@@ -68,7 +68,7 @@ class ActionSettings(models.Model):
 
 class BearDetect(models.Model):
     symbol = models.CharField(
-        max_length=20,
+        max_length=50,
         default='',
     )
 
