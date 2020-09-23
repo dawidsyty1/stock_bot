@@ -22,10 +22,10 @@ class REQUEST_PARAMETERS:
 
 
 def to_hours_dictionary(serialized_response, filter=True):
-
+    ordered_time_stamp = sorted(list, serialized_response['t'])
     hours_dictionary = {
         datetime.fromtimestamp(timestamp).strftime(TIME_FORMAT): []
-        for index, timestamp in enumerate(serialized_response['t'])
+        for timestamp in ordered_time_stamp
     }
 
     for index, timestamp in enumerate(serialized_response['t']):
