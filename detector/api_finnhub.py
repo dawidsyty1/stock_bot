@@ -72,19 +72,12 @@ def get_last_30_days_data(item):
 
     base_url = candle_url(item.stock_type)
     days_from = 30
-    if item.stock_type == StockType.FOREX:
-        if item.time_resolution == '1':
-            days_from = 3
-        elif item.time_resolution == '5':
-            days_from = 10
-        else:
-            days_from = 15
 
     response = requests.get(
         base_url,
         {
             REQUEST_PARAMETERS.SYMBOL: item.symbol,
-            REQUEST_PARAMETERS.RESOLUTION: item.time_resolution,
+            REQUEST_PARAMETERS.RESOLUTION: '15',
             REQUEST_PARAMETERS.FROM: (
                     datetime.now() + timedelta(days=-days_from)
             ).replace(hour=2, second=0, minute=1).strftime('%s'),

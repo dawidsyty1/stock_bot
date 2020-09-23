@@ -1,16 +1,22 @@
 from django.db import models
 from django.contrib import admin
 
-RESOLUTION_CHOICES = (
-        ('1', '1 Minutes'),
-        ('5', '5 Minutes'),
-        ('15', '15 Minutes'),
-        ('30', '30 Minutes'),
-        ('60', '60 Minutes'),
-        ('D', 'Day'),
-        ('W', 'Week'),
-        ('M', 'Month'),
-    )
+
+class TimeResolutions:
+    time_divide_values = {
+        '1': 15,
+        '5': 3,
+        '15': 1,
+    }
+
+    def time_divide(self, time):
+        return self.time_divide_values[time]
+
+    CHOICES = (
+            ('1', '1 Minutes'),
+            ('5', '5 Minutes'),
+            ('15', '15 Minutes'),
+        )
 
 
 class StockType(object):
@@ -53,7 +59,7 @@ class ActionSettings(models.Model):
 
     price_percenage = models.IntegerField(default=0)
 
-    time_resolution = models.CharField(default=1, max_length=2, choices=RESOLUTION_CHOICES)
+    time_resolution = models.CharField(default=1, max_length=2, choices=TimeResolutions.CHOICES)
     time_from = models.TimeField(blank=True, null=True)
     time_to = models.TimeField(blank=True, null=True)
     stock_type = models.CharField(default='1', max_length=1, choices=StockType.CHOICES)
@@ -85,7 +91,7 @@ class BearDetect(models.Model):
 
     price_open = models.FloatField(blank=True, null=True)
 
-    time_resolution = models.CharField(default=1, max_length=2, choices=RESOLUTION_CHOICES)
+    time_resolution = models.CharField(default=1, max_length=2, choices=TimeResolutions.CHOICES)
 
     price_close = models.FloatField(blank=True, null=True)
 

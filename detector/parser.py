@@ -3,7 +3,7 @@ import csv
 from datetime import datetime
 from .helper import percenage, get_hours_dictionary_average
 from .api_finnhub import get_last_5_minutes_data, get_last_data
-from .models import BearDetect
+from .models import BearDetect, TimeResolutions
 from .const import TIME_FORMAT, HISTORICAL_DATA
 
 
@@ -14,9 +14,10 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
             time_key = datetime.fromtimestamp(timestamp).strftime(TIME_FORMAT)
             fast_average_value = get_hours_dictionary_average(hours_dictionary_average, time_key)
             volume = serialized_response['v'][index]
-            max_volume = percenage(float(fast_average_value), item.volume_percenage)
+            divide_by = TimeResolutions().time_divide(item.time_resolution)
+            max_volume = percenage(float(fast_average_value)/divide_by, item.volume_percenage)
             logging.info(
-                'Symbol: {} time: {}, volume: {} max_volume: {} changed volume: {}, open: {}, close {} changed price {} o > c {} out {}'.format(
+                'Symbol: {} time: {}, volume: {} max_volume: {} changed volume: {}\n , open: {}, close {} changed price {} o > c {} out {} fast_average_value {}'.format(
                     item.symbol,
                     time_key,
                     volume,
@@ -27,6 +28,7 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
                     (float(serialized_response['o'][index]) / float(serialized_response['c'][index])) / 100,
                     serialized_response['o'][index] > serialized_response['c'][index],
                     volume > max_volume,
+                    fast_average_value,
                 )
             )
             if volume > max_volume:
@@ -58,7 +60,7 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
 
 def parse_data(item):
     try:
-        reader = csv.reader(open(f'data/{item.symbol}_{item.time_resolution}_average.csv'))
+        reader = csv.reader(open(f'data/{item.symbol}_15_average.csv'))
     except FileNotFoundError:
         from .tasks import task_force_get_data
         logging.info('Error [{}] hours dictionary average empty'.format(item.symbol))

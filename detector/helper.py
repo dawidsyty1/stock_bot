@@ -48,11 +48,13 @@ def get_hours_dictionary_average(hours_dictionary, time_key):
     except KeyError as error:
         time_key_pivot = datetime.strptime(time_key, TIME_FORMAT)
         result = min(
-            item
-            for item in hours_dictionary.keys()
+            list(hours_dictionary.keys())[index - 1]
+            for index, item in enumerate(hours_dictionary.keys())
             if datetime.strptime(item, TIME_FORMAT) > time_key_pivot
         )
+
         return hours_dictionary[result]
+
 
 def percenage(value, percenage_value):
     return value + (value * percenage_value / 100)
