@@ -26,8 +26,11 @@ tr:nth-child(even) {
     <div>
         <div>
             <h2>Most active today</h2>
-            <button type="button" onclick="location.href='/?clear_data=true'" >Clear Data</button>
             <button type="button" onclick="location.href='/admin/detector'" >Admin</button>
+            <button type="button" onclick="location.href='/csv_data?clear_data=true'" >Clear Data</button>
+            <button type="button" onclick="location.href='/csv_data?remove_all_action=true'" >Clean up actions</button>
+            <button type="button" onclick="location.href='/csv_data?force_clean_up=true'" >Clean up and get data</button>
+            <button type="button" onclick="location.href='/csv_data?force_fetch_data=true'" >Fetch up</button>
         </div>
         </br>
         <table>

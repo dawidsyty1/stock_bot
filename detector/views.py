@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from .tasks import task_clean_up_and_set_data, task_us_get_data, task_delete_all_data, task_delete_all_action_list
 
 
 class CSVDataView(APIView):
@@ -12,11 +13,31 @@ class CSVDataView(APIView):
     template_name = 'csv_file_data.html'
 
     def get(self, request):
+        force_clean_up = request.GET.get('force_clean_up', 'false')
+        if force_clean_up == 'true':
+            task_clean_up_and_set_data.apply_async(args=())
+            return redirect('/')
+
+        remove_action = request.GET.get('remove_all_action', 'false')
+        if remove_action == 'true':
+            task_delete_all_data()
+            task_delete_all_action_list()
+            return redirect('/')
+
+        force_fetch_data = request.GET.get('force_fetch_data', 'false')
+        if force_fetch_data == 'true':
+            task_us_get_data.delay()
+            return redirect('/')
+
+        if request.GET.get('clear_data', 'false') == 'true':
+            BearDetect.objects.all().delete()
+            return redirect('/')
+
         file_name = request.GET.get('file_name', '')
         try:
             reader = csv.reader(open(f'data/{file_name}'))
         except FileNotFoundError:
-            return
+            return redirect('/')
 
         hours_dictionary_average = {
             row[0].split(' ')[1]: row[0].split(' ')[2]
@@ -61,9 +82,6 @@ class BearListView(APIView):
         ]
 
     def get(self, request):
-        if request.GET.get('clear_data', 'false') == 'true':
-            BearDetect.objects.all().delete()
-            return redirect('/')
         return Response({
             'bears_list': self.create_bear_list(),
             'most_active_items': self.create_context_for_item()

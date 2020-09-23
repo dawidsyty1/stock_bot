@@ -155,6 +155,7 @@ def task_parse_data():
             task_triger_parse_data_for.apply_async(args=(item.id,))
 
 
+@app.task
 def task_clean_up_and_set_data():
     task_delete_all_data()
     task_delete_all_action_list()
