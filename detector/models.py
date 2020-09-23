@@ -96,7 +96,7 @@ class BearDetect(models.Model):
 
 
 class BearDetectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'symbol', 'time', 'volume', 'max_volume', 'price_open', 'price_close')
+    list_display = ('name', 'symbol', 'time', 'volume', 'max_volume', 'price_open', 'price_close', 'price_percenage')
     readonly_fields = ('name', 'symbol', 'time', 'volume', 'max_volume', 'price_open', 'price_close')
 
 
