@@ -53,17 +53,21 @@ def task_set_tokens_from_file():
 
 @app.task
 def task_enable_from_file():
-    try:
-        reader = csv.reader(open('config/data_config/nasdaq_etoro_companies.csv'))
-    except FileNotFoundError:
-        logging.info('task_set_tokens_from_file'.format())
+    files = [
+        'nasdaq_etoro_companies.csv',
+        'forex_companies.csv'
+    ]
+    for file in files:
+        try:
+            reader = csv.reader(open(f'config/data_config/{file}'))
+            symbols = [row[0] for row in reader]
+            for item in ActionSettings.objects.filter(symbol__in=symbols):
+                item.enable = True
+                item.save()
 
-        return
+        except FileNotFoundError:
+            logging.info('task_set_tokens_from_file'.format())
 
-    symbols = [row[0] for row in reader]
-    for item in ActionSettings.objects.filter(symbol__in=symbols):
-        item.enable = True
-        item.save()
 
 
 @app.task
@@ -149,3 +153,11 @@ def task_parse_data():
         time = datetime.now().time()
         for item in ActionSettings.objects.filter(enable=True, time_from__lte=time, time_to__gte=time):
             task_triger_parse_data_for.apply_async(args=(item.id,))
+
+
+def task_clean_up_and_set_data():
+    task_delete_all_action_list()
+    task_delete_all_data()
+    task_update_action_list()
+    task_enable_from_file()
+    task_set_tokens_from_file()

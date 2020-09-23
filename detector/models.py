@@ -130,6 +130,21 @@ def set_percentage_volument_100_action(modeladmin, request, queryset):
     short_description = "Set percentage volument 100"
 
 
+def set_percentage_volument_130_action(modeladmin, request, queryset):
+    queryset.update(volume_percenage=130)
+    short_description = "Set percentage volument 100"
+
+
+def set_percentage_volument_150_action(modeladmin, request, queryset):
+    queryset.update(volume_percenage=150)
+    short_description = "Set percentage volument 100"
+
+
+def set_percentage_volument_200_action(modeladmin, request, queryset):
+    queryset.update(volume_percenage=200)
+    short_description = "Set percentage volument 200"
+
+
 def enable_bull_market_action(modeladmin, request, queryset):
     queryset.update(bull_market=True)
     short_description = "Enable bull market"
@@ -185,6 +200,9 @@ class ActionSettingsAdmin(admin.ModelAdmin):
         set_percentage_volument_10_action,
         set_percentage_volument_50_action,
         set_percentage_volument_100_action,
+        set_percentage_volument_130_action,
+        set_percentage_volument_150_action,
+        set_percentage_volument_200_action,
         clear_tokens
     ]
     search_fields = ('id', 'name', 'symbol')
