@@ -1,10 +1,30 @@
 from .models import BearDetect
+import csv
 from django.db.models import Count
 from django.shortcuts import redirect
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+
+class CSVDataView(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'csv_file_data.html'
+
+    def get(self, request):
+        file_name = request.GET.get('file_name', '')
+        try:
+            reader = csv.reader(open(f'data/{file_name}'))
+        except FileNotFoundError:
+            return
+
+        hours_dictionary_average = {
+            row[0].split(' ')[1]: row[0].split(' ')[2]
+            for row in reader
+        }
+        return Response({
+            'csv_datas': hours_dictionary_average,
+        })
 
 
 class BearListView(APIView):
@@ -35,6 +55,7 @@ class BearListView(APIView):
                 'price_open': item.price_open,
                 'price_close': item.price_close,
                 'price_percenage': item.price_percenage,
+                'csv_file': item.action_settings.csv_file,
             }
             for item in BearDetect.objects.all().order_by('-time')[:20]
         ]

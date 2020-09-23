@@ -2,6 +2,6 @@ from . import views
 from django.urls import path
 
 urlpatterns = [
-    path('', views.BearListView.as_view(), name=''),
-    path('clear_data', views.BearListView.as_view(), name='clear_data'),
+    path('', views.BearListView.as_view()),
+    path(r'csv_data/', views.CSVDataView.as_view()),
 ]

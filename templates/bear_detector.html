@@ -65,6 +65,7 @@ tr:nth-child(even) {
                 <td>{{bear.price_open}}</td>
                 <td>{{bear.price_close}}</td>
                 <td>{{bear.price_percenage}}</td>
+                <td><a href="csv_data?file_name={{ bear.csv_file }}"> {{bear.csv_file}} </a></td>
              </tr>
             {% endfor %}
         </table>

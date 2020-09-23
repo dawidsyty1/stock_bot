@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+div{
+  margin: 40px;
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+    </style>
+</head>
+<body>
+<div>
+    <div>
+        <h2>CSV data</h2>
+        <button type="button" onclick="location.href='/'">Return</button>
+    </div>
+    <table>
+        <tr>
+            <th>Time</th>
+            <th>Value</th>
+        </tr>
+        {% for key, values in csv_datas.items %}
+        <tr>
+            <td>{{key}}</td>
+            <td>{{values}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+</body>
+
+</html>
+

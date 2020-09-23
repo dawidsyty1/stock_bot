@@ -32,5 +32,5 @@ def get_data(item):
         spamwriter = csv.writer(file, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         for index, (key, value) in enumerate(hours_dictionary_average.items()):
             spamwriter.writerow([index, key, value])
-        item.csv_file.name = f'data/{item.symbol}_{item.time_resolution}_average.csv'
+        item.csv_file.name = f'{item.symbol}_15_average.csv'
         item.save()
