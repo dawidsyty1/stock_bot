@@ -71,6 +71,7 @@ def task_enable_from_file():
 
 @app.task
 def task_delete_all_action_list():
+    BearDetect.objects.all().delete()
     ActionSettings.objects.all().delete()
 
 
@@ -155,8 +156,8 @@ def task_parse_data():
 
 
 def task_clean_up_and_set_data():
-    task_delete_all_action_list()
     task_delete_all_data()
+    task_delete_all_action_list()
     task_update_action_list()
     task_enable_from_file()
     task_set_tokens_from_file()
