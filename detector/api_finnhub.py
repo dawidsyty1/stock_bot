@@ -66,7 +66,7 @@ def get_last_5_minutes_data(item):
 
 
 def get_last_30_days_data(item):
-    to_date = (datetime.now() + timedelta(days=-1)).replace(second=0, hour=0, minute=1).strftime('%s')
+    to_date = (datetime.now() + timedelta(days=-1)).replace(second=0, hour=1, minute=1).strftime('%s')
     if HISTORICAL_DATA:
         to_date = (datetime.now() + timedelta(days=-2)).replace(second=0, hour=0, minute=1).strftime('%s')
 
@@ -87,7 +87,7 @@ def get_last_30_days_data(item):
             REQUEST_PARAMETERS.RESOLUTION: item.time_resolution,
             REQUEST_PARAMETERS.FROM: (
                     datetime.now() + timedelta(days=-days_from)
-            ).replace(second=0, hour=0, minute=1).strftime('%s'),
+            ).replace(hour=2, second=0, minute=1).strftime('%s'),
             REQUEST_PARAMETERS.TO: to_date,
             REQUEST_PARAMETERS.TOKEN: item.token,
         }
