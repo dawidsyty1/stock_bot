@@ -15,23 +15,24 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
             fast_average_value = get_hours_dictionary_average(hours_dictionary_average, time_key)
             volume = serialized_response['v'][index]
             divide_by = TimeResolutions().time_divide(item.time_resolution)
-            max_volume = percenage(float(fast_average_value)/divide_by, item.volume_percenage)
+            fast_average_value = float(fast_average_value)/divide_by
+            volumen_changed_percentage = ((int(volume) / int(fast_average_value)) * 100)
+
             logging.info(
-                'Symbol: {} time: {}, volume: {} max_volume: {} changed volume: {}\n , open: {}, close {} changed price {} o > c {} out {} fast_average_value {}'.format(
+                'Symbol: {} time: {}, volume: {} fast_average_value: {} volumen_changed_percentage: {}\n , open: {}, close {} changed price {} o > c {} out {}'.format(
                     item.symbol,
                     time_key,
                     volume,
-                    int(max_volume),
-                    (float(max_volume) / float(volume)) / 100,
+                    int(fast_average_value),
+                    volumen_changed_percentage,
                     serialized_response['o'][index],
                     serialized_response['c'][index],
                     (float(serialized_response['o'][index]) / float(serialized_response['c'][index])) / 100,
                     serialized_response['o'][index] > serialized_response['c'][index],
-                    volume > max_volume,
-                    fast_average_value,
+                    volumen_changed_percentage > item.volume_percenage,
                 )
             )
-            if volume > max_volume:
+            if volumen_changed_percentage > item.volume_percenage:
                 if item.bull_market and serialized_response['o'][index] < serialized_response['c'][index] or\
                         not item.bull_market and serialized_response['o'][index] > serialized_response['c'][index]:
                     bear = BearDetect.objects.filter(
@@ -44,9 +45,9 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
                             time=time_key,
                             symbol=item.symbol,
                             name=item.name,
-                            price_percenage=(int(volume) / int(max_volume)) * 100,
+                            price_percenage=volumen_changed_percentage,
                             volume=str(volume),
-                            max_volume=str(max_volume),
+                            max_volume=str(fast_average_value),
                             time_resolution=item.time_resolution,
                             price_open=serialized_response['o'][index],
                             price_close=serialized_response['c'][index],
