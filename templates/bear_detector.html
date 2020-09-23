@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<h2>Most active today</h2>
+
+<table>
+      <tr>
+        <th>Name</th>
+        <th>Count</th>
+      </tr>
+    {% for item in most_active_items %}
+      <tr>
+        <td><a href="{{ item.link }}" target="_blank"> {{item.name}} </a></td>
+        <td>{{item.count}}</td>
+     </tr>
+    {% endfor %}
+</table>
+
+
+<h2>HTML Table with the list of items</h2>
+
+<table>
+      <tr>
+        <th>Name</th>
+        <th>Symbol</th>
+        <th>Time</th>
+      </tr>
+    {% for bear in bears_list %}
+      <tr>
+        <td>{{bear.name}}</td>
+        <td>{{bear.symbol}}</td>
+        <td>{{bear.time}}</td>
+     </tr>
+    {% endfor %}
+</table>
+
+</body>
+<script language="javascript" type="text/javascript">
+setTimeout(reloadPage, 5000);
+
+function reloadPage () {
+    console.log('test')
+    window.location.reload();
+}
+</script>
+</html>
+
