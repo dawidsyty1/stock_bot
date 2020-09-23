@@ -1,8 +1,10 @@
 from .models import BearDetect
 from django.db.models import Count
+from django.shortcuts import redirect
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 
 
 class BearListView(APIView):
@@ -38,6 +40,9 @@ class BearListView(APIView):
         ]
 
     def get(self, request):
+        if request.GET.get('clear_data', 'false') == 'true':
+            BearDetect.objects.all().delete()
+            return redirect('/')
         return Response({
             'bears_list': self.create_bear_list(),
             'most_active_items': self.create_context_for_item()
