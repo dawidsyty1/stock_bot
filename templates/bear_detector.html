@@ -52,6 +52,7 @@ tr:nth-child(even) {
         <table>
               <tr>
                 <th>Name</th>
+                <th>Symbol</th>
                 <th>Time</th>
                 <th>Volume</th>
                 <th>Max volume</th>
@@ -62,6 +63,7 @@ tr:nth-child(even) {
             {% for bear in bears_list %}
               <tr>
                 <td><a href="/admin/detector/actionsettings/{{ bear.action_settings }}/change/" target="_blank"> {{bear.name}} </a></td>
+                <td><a href="{{ item.link }}" target="_blank"> {{item.symbol}} </a></td>
                 <td>{{bear.time}}</td>
                 <td>{{bear.volume}}</td>
                 <td>{{bear.max_volume}}</td>

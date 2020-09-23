@@ -70,6 +70,8 @@ class BearListView(APIView):
             {
                 'action_settings': item.action_settings.id,
                 'name': item.name,
+                'symbol': item.symbol,
+                'link': f'https://www.etoro.com/markets/{item.symbol}/chart',
                 'time': item.time,
                 'volume': item.volume,
                 'max_volume': item.max_volume,
