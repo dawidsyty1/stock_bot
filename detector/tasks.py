@@ -54,7 +54,7 @@ def task_set_tokens_from_file():
 @app.task
 def task_enable_from_file():
     files = [
-        # 'nasdaq_etoro_companies.csv',
+        'nasdaq_etoro_companies.csv',
         'forex_companies.csv'
     ]
     for file in files:
