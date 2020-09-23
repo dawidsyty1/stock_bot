@@ -63,7 +63,7 @@ tr:nth-child(even) {
             {% for bear in bears_list %}
               <tr>
                 <td><a href="/admin/detector/actionsettings/{{ bear.action_settings }}/change/" target="_blank"> {{bear.name}} </a></td>
-                <td><a href="{{ item.link }}" target="_blank"> {{item.symbol}} </a></td>
+                <td><a href="{{ bear.link }}" target="_blank"> {{bear.symbol}} </a></td>
                 <td>{{bear.time}}</td>
                 <td>{{bear.volume}}</td>
                 <td>{{bear.max_volume}}</td>

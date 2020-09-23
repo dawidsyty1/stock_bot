@@ -61,7 +61,7 @@ class BearListView(APIView):
                 'count': item['c'],
                 'link': f'https://www.etoro.com/markets/{item["name"]}/chart'
             }
-            for item in queryset.values('name').annotate(c=Count('name')).order_by('-c')
+            for item in queryset.values('name').annotate(c=Count('name')).order_by('-c')[:10]
         ]
 
     @staticmethod
