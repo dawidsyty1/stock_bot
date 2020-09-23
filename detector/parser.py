@@ -61,11 +61,7 @@ def parse_data(item):
     except FileNotFoundError:
         from .tasks import task_force_get_data
         logging.info('Error [{}] hours dictionary average empty'.format(item.symbol))
-
-        if item.forced == False:
-            item.forced = True
-            item.save()
-            task_force_get_data.delay(item.id)
+        task_force_get_data.delay(item.id)
         return
 
     hours_dictionary_average = {
@@ -74,7 +70,9 @@ def parse_data(item):
     }
 
     if hours_dictionary_average == {}:
+        from .tasks import task_force_get_data
         logging.info('Error [{}] hours dictionary average empty'.format(item.symbol))
+        task_force_get_data.delay(item.id)
         return
 
     serialized_response = get_last_5_minutes_data(item)
