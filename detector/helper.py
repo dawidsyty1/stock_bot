@@ -1,6 +1,5 @@
 import logging
-from datetime import datetime, timedelta
-
+from datetime import datetime, timedelta, time
 
 BASE_URL = 'https://finnhub.io/api/v1/stock/candle'
 
@@ -22,10 +21,17 @@ class REQUEST_PARAMETERS:
 
 
 def to_hours_dictionary(serialized_response, filter=True):
-    ordered_time_stamp = sorted(list, serialized_response['t'])
+
+    time_key_array = [
+        datetime.fromtimestamp(timestamp).strftime(TIME_FORMAT)
+        for index, timestamp in enumerate(serialized_response['t'])
+    ]
+
+    time_key_array = sorted(time_key_array)
+
     hours_dictionary = {
-        datetime.fromtimestamp(timestamp).strftime(TIME_FORMAT): []
-        for timestamp in ordered_time_stamp
+        time_key: []
+        for time_key in time_key_array
     }
 
     for index, timestamp in enumerate(serialized_response['t']):
