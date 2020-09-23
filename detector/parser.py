@@ -46,6 +46,7 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
                             symbol=item.symbol,
                             name=item.name,
                             price_percenage=volumen_changed_percentage,
+                            action_settings=item,
                             volume=str(volume),
                             max_volume=str(fast_average_value),
                             time_resolution=item.time_resolution,

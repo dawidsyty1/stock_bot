@@ -27,8 +27,8 @@ class BearListView(APIView):
     def create_bear_list():
         return [
             {
+                'action_settings': item.action_settings.id,
                 'name': item.name,
-                'symbol': item.symbol,
                 'time': item.time,
                 'volume': item.volume,
                 'max_volume': item.max_volume,

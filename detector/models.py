@@ -85,6 +85,8 @@ class BearDetect(models.Model):
 
     time = models.TimeField(blank=True, null=True)
 
+    action_settings = models.ForeignKey(ActionSettings, blank=True, null=True, on_delete=models.DO_NOTHING)
+
     volume = models.FloatField(blank=True, null=True)
 
     max_volume = models.FloatField(blank=True, null=True)
