@@ -28,6 +28,11 @@ class BearListView(APIView):
                 'name': item.name,
                 'symbol': item.symbol,
                 'time': item.time,
+                'volume': item.volume,
+                'max_volume': item.max_volume,
+                'price_open': item.price_open,
+                'price_close': item.price_close,
+                'price_percenage': item.price_percenage,
             }
             for item in BearDetect.objects.all().order_by('-time')[:20]
         ]

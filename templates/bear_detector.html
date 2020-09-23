@@ -44,12 +44,22 @@ tr:nth-child(even) {
         <th>Name</th>
         <th>Symbol</th>
         <th>Time</th>
+        <th>Volume</th>
+        <th>Max volume</th>
+        <th>Price open</th>
+        <th>Price close</th>
+        <th>Price percenage</th>
       </tr>
     {% for bear in bears_list %}
       <tr>
         <td>{{bear.name}}</td>
         <td>{{bear.symbol}}</td>
         <td>{{bear.time}}</td>
+        <td>{{bear.volume}}</td>
+        <td>{{bear.max_volume}}</td>
+        <td>{{bear.price_open}}</td>
+        <td>{{bear.price_close}}</td>
+        <td>{{bear.price_percenage}}</td>
      </tr>
     {% endfor %}
 </table>
