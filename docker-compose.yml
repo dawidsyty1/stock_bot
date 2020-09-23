@@ -5,6 +5,11 @@ db:
     - .:/usr/src/app
   ports:
     - "127.0.0.1:5432:5432"
+  logging:
+    options:
+      max-size: "10m"
+      max-file: "3"
+
 nginx:
   restart: always
   build: ./config/nginx/
@@ -16,12 +21,20 @@ nginx:
     - web
   links:
     - web:web
+  logging:
+    options:
+      max-size: "10m"
+      max-file: "3"
 
 redis:
   restart: always
   image: redis:4.0
   ports:
     - "6379:6379"
+  logging:
+    options:
+      max-size: "10m"
+      max-file: "3"
 
 web:
   restart: always
@@ -37,6 +50,10 @@ web:
     - celery:celery
     - db:db
   command: ./config/uwsgi/init.sh
+  logging:
+    options:
+      max-size: "10m"
+      max-file: "3"
 
 celery:
 #  restart: always
@@ -51,3 +68,7 @@ celery:
   links:
     - redis:redis
     - db:db
+  logging:
+    options:
+      max-size: "10m"
+      max-file: "3"
