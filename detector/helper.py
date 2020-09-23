@@ -52,7 +52,7 @@ def get_hours_dictionary_average(hours_dictionary, time_key):
             for index, item in enumerate(hours_dictionary.keys())
             if datetime.strptime(item, TIME_FORMAT) > time_key_pivot
         )
-
+        logging.info('get_hours_dictionary_average {}'.format(result))
         return hours_dictionary[result]
 
 
