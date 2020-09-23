@@ -74,7 +74,7 @@ def get_last_30_days_data(item):
     days_from = 30
     if item.stock_type == StockType.FOREX:
         if item.time_resolution == '1':
-            days_from = 5
+            days_from = 3
         elif item.time_resolution == '5':
             days_from = 10
         else:
