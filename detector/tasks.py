@@ -69,7 +69,6 @@ def task_enable_from_file():
             logging.info('task_set_tokens_from_file'.format())
 
 
-
 @app.task
 def task_delete_all_action_list():
     ActionSettings.objects.all().delete()
