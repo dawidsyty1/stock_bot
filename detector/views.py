@@ -84,7 +84,9 @@ class BearListView(APIView):
         ]
 
     def get(self, request):
+        bears_list = self.create_bear_list()
         return Response({
-            'bears_list': self.create_bear_list(),
-            'most_active_items': self.create_context_for_item()
+            'bears_list': bears_list,
+            'most_active_items': self.create_context_for_item(),
+            'beat_title': f'{len(bears_list)}: last: {bears_list[0]["time"] if len(bears_list) > 0 else ""}'
         })

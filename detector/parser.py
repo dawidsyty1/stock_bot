@@ -12,10 +12,10 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
     for index, timestamp in enumerate(serialized_response['t']):
         try:
             time_key = datetime.fromtimestamp(timestamp).strftime(TIME_FORMAT)
-            fast_average_value = get_hours_dictionary_average(hours_dictionary_average, time_key)
+            fast_average_value_test = get_hours_dictionary_average(hours_dictionary_average, time_key)
             volume = serialized_response['v'][index]
             divide_by = TimeResolutions().time_divide(item.time_resolution)
-            fast_average_value = float(fast_average_value)/divide_by
+            fast_average_value = float(fast_average_value_test)/divide_by
             volumen_changed_percentage = ((int(volume) / int(fast_average_value)) * 100)
 
             logging.info(
