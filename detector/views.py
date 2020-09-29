@@ -80,7 +80,7 @@ class BearListView(APIView):
                 'price_percenage': item.price_percenage,
                 'csv_file': item.action_settings.csv_file,
             }
-            for item in BearDetect.objects.all().order_by('-time')[:20]
+            for item in BearDetect.objects.all().order_by('-time')
         ]
 
     def get(self, request):
