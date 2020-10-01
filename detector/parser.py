@@ -33,28 +33,26 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
                 )
             )
             if volumen_changed_percentage > item.volume_percenage:
-                if item.bull_market and serialized_response['o'][index] < serialized_response['c'][index] or\
-                        not item.bull_market and serialized_response['o'][index] > serialized_response['c'][index]:
-                    bear = BearDetect.objects.filter(
-                        time=time_key, symbol=item.symbol, time_resolution=item.time_resolution
-                    )
+                bear = BearDetect.objects.filter(
+                    time=time_key, symbol=item.symbol, time_resolution=item.time_resolution
+                )
 
-                    if len(bear) == 0:
-                        from .tasks import task_triger_move
-                        bear = BearDetect(
-                            time=time_key,
-                            symbol=item.symbol,
-                            name=item.name,
-                            price_percenage=volumen_changed_percentage,
-                            action_settings=item,
-                            volume=str(volume),
-                            max_volume=str(fast_average_value),
-                            time_resolution=item.time_resolution,
-                            price_open=serialized_response['o'][index],
-                            price_close=serialized_response['c'][index],
-                        )
-                        bear.save()
-                        task_triger_move.delay(bear.id, item.id)
+                if len(bear) == 0:
+                    from .tasks import task_triger_move
+                    bear = BearDetect(
+                        time=time_key,
+                        symbol=item.symbol,
+                        name=item.name,
+                        price_percenage=volumen_changed_percentage,
+                        action_settings=item,
+                        volume=str(volume),
+                        max_volume=str(fast_average_value),
+                        time_resolution=item.time_resolution,
+                        price_open=serialized_response['o'][index],
+                        price_close=serialized_response['c'][index],
+                    )
+                    bear.save()
+                    task_triger_move.delay(bear.id, item.id)
 
         except Exception as error:
             logging.info('Error {} {} {}'.format(error, type(error), item.symbol))
