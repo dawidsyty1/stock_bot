@@ -6,6 +6,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .tasks import task_clean_up_and_set_data, task_us_get_data, task_delete_all_data, task_delete_all_action_list
+from django.http import JsonResponse
 
 
 class CSVDataView(APIView):
@@ -48,45 +49,61 @@ class CSVDataView(APIView):
         })
 
 
+def create_context_for_item():
+    queryset = BearDetect.objects.all()
+    return [
+        {
+            'name': item['name'],
+            'count': item['c'],
+            'link': f'https://www.etoro.com/markets/{item["name"]}/chart'
+        }
+        for item in queryset.values('name').annotate(c=Count('name')).order_by('-c')[:10]
+    ]
+
+
+def create_bear_list(show_all):
+    bears_items = BearDetect.objects.all().order_by('-time')[:20]
+    if show_all:
+        bears_items = BearDetect.objects.all().order_by('-time')
+    return [
+        {
+            'action_settings': item.action_settings.id,
+            'name': item.name,
+            'symbol': item.symbol,
+            'link': f'https://www.etoro.com/markets/{item.symbol}/chart',
+            'time': item.time,
+            'volume': item.volume,
+            'max_volume': item.max_volume,
+            'price_open': item.price_open,
+            'price_close': item.price_close,
+            'price_percenage': item.price_percenage,
+            'csv_file': str(item.action_settings.csv_file),
+        }
+        for item in bears_items
+    ]
+
+
 class BearListView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'bear_detector.html'
 
-    @staticmethod
-    def create_context_for_item():
-        queryset = BearDetect.objects.all()
-        return [
-            {
-                'name': item['name'],
-                'count': item['c'],
-                'link': f'https://www.etoro.com/markets/{item["name"]}/chart'
-            }
-            for item in queryset.values('name').annotate(c=Count('name')).order_by('-c')[:10]
-        ]
-
-    @staticmethod
-    def create_bear_list():
-        return [
-            {
-                'action_settings': item.action_settings.id,
-                'name': item.name,
-                'symbol': item.symbol,
-                'link': f'https://www.etoro.com/markets/{item.symbol}/chart',
-                'time': item.time,
-                'volume': item.volume,
-                'max_volume': item.max_volume,
-                'price_open': item.price_open,
-                'price_close': item.price_close,
-                'price_percenage': item.price_percenage,
-                'csv_file': item.action_settings.csv_file,
-            }
-            for item in BearDetect.objects.all().order_by('-time')
-        ]
-
     def get(self, request):
-        bears_list = self.create_bear_list()
-        return Response({
-            'bears_list': bears_list,
-            'most_active_items': self.create_context_for_item(),
-            'beat_title': f'{len(bears_list)}: last: {bears_list[0]["time"] if len(bears_list) > 0 else ""}'
-        })
+            show_all = request.GET.get('show_all', 'false')
+            bears_list = create_bear_list(show_all == 'true')
+            user_id = request.user.id
+            return Response({
+                'bears_list': bears_list,
+                'most_active_items': create_context_for_item(),
+                'beat_title': f'{len(bears_list)}: last: {bears_list[0]["time"] if len(bears_list) > 0 else ""}',
+                'user_id': user_id
+            })
+
+
+def bear_data_view(request):
+    bears_list = create_bear_list(False)
+    data = {
+        'bears_list': bears_list,
+        'most_active_items': create_context_for_item(),
+    }
+
+    return JsonResponse(data)
