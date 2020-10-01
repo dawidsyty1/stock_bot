@@ -104,6 +104,7 @@ def bear_data_view(request):
     data = {
         'bears_list': bears_list,
         'most_active_items': create_context_for_item(),
+        'beat_title': f'{len(bears_list)}: last: {bears_list[0]["time"] if len(bears_list) > 0 else ""}',
     }
 
     return JsonResponse(data)
