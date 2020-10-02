@@ -97,8 +97,8 @@ class BearDetect(models.Model):
 
     price_close = models.FloatField(blank=True, null=True)
 
-    price_percenage = models.IntegerField(default=0)
-    volume_percenage = models.IntegerField(default=0)
+    price_percenage = models.FloatField(default=0)
+    volume_percenage = models.FloatField(default=0)
 
 
     def __str__(self):
