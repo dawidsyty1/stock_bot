@@ -8,7 +8,7 @@ from detector.models import ActionSettings, BearDetect, StockType
 from .const import HISTORICAL_DATA, MAX_NUMBERS_PER_TOKEN
 from .parser import parse_data, fetch_current_price
 from .fetcher import get_data
-from .api_fbchat import send_message
+from .api_smsplanet import send_sms
 from .api_finnhub import list_stock_data, list_forex_data, list_crypto_data
 from .helper import synchronize_time
 
@@ -86,11 +86,13 @@ def task_delete_all_data():
 @app.task
 def task_triger_move(bear_id, item_id):
     logging.info('task_triger_move {} {}'.format(bear_id, item_id))
-    # item = ActionSettings.objects.get(id=item_id)
-    # bear = BearDetect.objects.get(id=bear_id)
-    # if item and bear:
-    #     current_price = fetch_current_price(item)
-    #     send_message(bear, item, current_price)
+    bear = BearDetect.objects.get(id=bear_id)
+    time = datetime.now().time()
+    time_from = datetime.now().replace(second=0, hour=8, minute=00).time()
+    time_to = datetime.now().replace(second=0, hour=22, minute=00).time()
+
+    if time_from > time or (time_to < time):
+        send_sms(bear)
 
 
 @periodic_task(run_every=crontab(hour=1, minute=00))

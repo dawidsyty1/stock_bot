@@ -132,12 +132,15 @@ tr:nth-child(even) {
             row.insertCell(5).innerHTML = bearsList[index].price_open;
             row.insertCell(6).innerHTML = bearsList[index].price_close;
 
+            var Td1 = row.insertCell(7);
+            Td1.innerHTML = bearsList[index].price_percenage;
             if(bearsList[index].price_percenage >= 1) {
-                row.insertCell(7).style.backgroundColor = "red";
+                Td1.bgColor = "red";
             } else {
-                row.insertCell(7).style.backgroundColor = "green";
+                Td1.bgColor = "green";
             }
-            row.insertCell(7).innerHTML = bearsList[index].price_percenage;
+            row.appendChild(Td1);
+
             row.insertCell(8).innerHTML = bearsList[index].volume_percenage;
             row.insertCell(9).innerHTML = bearsList[index].csv_file;
         }
