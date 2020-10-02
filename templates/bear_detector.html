@@ -51,34 +51,6 @@ tr:nth-child(even) {
              </tr>
             {% endfor %}
         </table>
-
-        <h2>Investing chats</h2>
-        <div>
-            <iframe id="germany-30"
-                title="Inline Frame Example"
-                width="400"
-                height="500"
-                src="https://www.investing.com/indices/germany-30">
-            </iframe>
-            <iframe id="us-spx-500"
-                title="Inline Frame Example"
-                width="400"
-                height="500"
-                src="https://www.investing.com/indices/us-spx-500">
-            </iframe>
-            <iframe id="nasdaq-composite"
-                title="Inline Frame Example"
-                width="400"
-                height="500"
-                src="https://www.investing.com/indices/nasdaq-composite">
-            </iframe>
-            <iframe id="gold"
-                title="Inline Frame Example"
-                width="400"
-                height="500"
-                src="https://www.investing.com/commodities/gold">
-            </iframe>
-        </div>
         <h2>HTML Table with the list of items</h2>
 
         <table id="bearsList">>
@@ -91,6 +63,8 @@ tr:nth-child(even) {
                 <th>Price open</th>
                 <th>Price close</th>
                 <th>Price percenage</th>
+                <th>Volumene percenage</th>
+                <th>CSV file</th>
               </tr>
             {% for bear in bears_list %}
               <tr>
@@ -102,6 +76,7 @@ tr:nth-child(even) {
                 <td>{{bear.price_open}}</td>
                 <td>{{bear.price_close}}</td>
                 <td>{{bear.price_percenage}}</td>
+                <td>{{bear.volume_percenage}}</td>
                 <td><a href="csv_data?file_name={{ bear.csv_file }}"> {{bear.csv_file}} </a></td>
              </tr>
             {% endfor %}
@@ -153,7 +128,8 @@ tr:nth-child(even) {
             row.insertCell(5).innerHTML = bearsList[index].price_open;
             row.insertCell(6).innerHTML = bearsList[index].price_close;
             row.insertCell(7).innerHTML = bearsList[index].price_percenage;
-            row.insertCell(8).innerHTML = bearsList[index].csv_file;
+            row.insertCell(8).innerHTML = bearsList[index].volume_percenage;
+            row.insertCell(9).innerHTML = bearsList[index].csv_file;
         }
     }
 

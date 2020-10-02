@@ -17,6 +17,7 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
             divide_by = TimeResolutions().time_divide(item.time_resolution)
             fast_average_value = float(fast_average_value_test)/divide_by
             volumen_changed_percentage = ((int(volume) / int(fast_average_value)) * 100)
+            price_changed_percentage = (float(serialized_response['o'][index]) / float(serialized_response['c'][index])) / 100
 
             logging.info(
                 'Symbol: {} time: {}, volume: {} fast_average_value: {} volumen_changed_percentage: {}\n , open: {}, close {} changed price {} o > c {} out {}'.format(
@@ -43,7 +44,8 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
                         time=time_key,
                         symbol=item.symbol,
                         name=item.name,
-                        price_percenage=volumen_changed_percentage,
+                        price_percenage=price_changed_percentage,
+                        volume_percenage=volumen_changed_percentage,
                         action_settings=item,
                         volume=str(volume),
                         max_volume=str(fast_average_value),

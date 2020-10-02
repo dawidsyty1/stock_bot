@@ -77,6 +77,7 @@ def create_bear_list(show_all):
             'price_open': item.price_open,
             'price_close': item.price_close,
             'price_percenage': item.price_percenage,
+            'volume_percenage': item.volume_percenage,
             'csv_file': str(item.action_settings.csv_file),
         }
         for item in bears_items
