@@ -75,7 +75,11 @@ tr:nth-child(even) {
                 <td>{{bear.max_volume}}</td>
                 <td>{{bear.price_open}}</td>
                 <td>{{bear.price_close}}</td>
-                <td>{{bear.price_percenage}}</td>
+                {% if bear.price_percenage >= 1 %}
+                    <td style="background-color: red;">{{bear.price_percenage}}</td>
+                {% else %}
+                    <td style="background-color: green;">{{bear.price_percenage}}</td>
+                {% endif %}
                 <td>{{bear.volume_percenage}}</td>
                 <td><a href="csv_data?file_name={{ bear.csv_file }}"> {{bear.csv_file}} </a></td>
              </tr>
@@ -128,6 +132,11 @@ tr:nth-child(even) {
             row.insertCell(5).innerHTML = bearsList[index].price_open;
             row.insertCell(6).innerHTML = bearsList[index].price_close;
             row.insertCell(7).innerHTML = bearsList[index].price_percenage;
+            if(bearsList[index].price_percenage >= 1) {
+                row.insertCell(7).style.backgroundColor = "red";
+            } else {
+                row.insertCell(7).style.backgroundColor = "green";
+            }
             row.insertCell(8).innerHTML = bearsList[index].volume_percenage;
             row.insertCell(9).innerHTML = bearsList[index].csv_file;
         }
