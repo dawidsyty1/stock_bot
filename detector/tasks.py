@@ -84,13 +84,12 @@ def task_delete_all_data():
 
 
 @app.task
-def task_triger_move(bear_id, item_id):
-    logging.info('task_triger_move {} {}'.format(bear_id, item_id))
+def task_triger_move(bear_id):
     bear = BearDetect.objects.get(id=bear_id)
     time = datetime.now().time()
     time_from = datetime.now().replace(second=0, hour=8, minute=00).time()
     time_to = datetime.now().replace(second=0, hour=22, minute=00).time()
-
+    logging.info(f'send sms time: {time} {time_from} {time_to}')
     if time_from > time or (time_to < time):
         send_sms(bear)
 

@@ -54,7 +54,8 @@ def parse_response_data(serialized_response, hours_dictionary_average, item):
                         price_close=serialized_response['c'][index],
                     )
                     bear.save()
-                    task_triger_move.delay(bear.id, item.id)
+                    if item.send_sms:
+                        task_triger_move.delay(bear.id)
 
         except Exception as error:
             logging.info('Error {} {} {}'.format(error, type(error), item.symbol))

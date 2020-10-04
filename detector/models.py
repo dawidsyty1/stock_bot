@@ -67,6 +67,7 @@ class ActionSettings(models.Model):
     bull_market = models.BooleanField(default=False)
     forced = models.BooleanField(default=False)
     csv_file = models.FileField(upload_to='documents', default='', blank=True, null=True)
+    send_sms = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.name}: {self.symbol}'
