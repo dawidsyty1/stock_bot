@@ -164,7 +164,7 @@ tr:nth-child(even) {
 
                 clearTable("bearsList")
                 generateTableBearsList(data.bears_list)
-
+                console.log('enableBuzzer', enableBuzzer, bearListItems, data.bears_list);
                 if (bearListItems.length > 0 && (bearListItems[0].time != data.bears_list[0].time || bearListItems[0].symbol != data.bears_list[0].symbol)) {
                     enableBuzzer = true;
                 }
