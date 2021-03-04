@@ -20,5 +20,5 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    path('', include('detector.urls')),
+    path('', include('bot_manager.urls')),
 ]

@@ -5,23 +5,23 @@ db:
     - .:/usr/src/app
   ports:
     - "127.0.0.1:5432:5432"
-nginx:
-  restart: always
-  build: ./config/nginx/
-  ports:
-    - "80:80"
-  volumes:
-    - ./log/nginx:/var/log/nginx
-  volumes_from:
-    - web
-  links:
-    - web:web
-
-redis:
-  restart: always
-  image: redis:4.0
-  ports:
-    - "6379:6379"
+#nginx:
+#  restart: always
+#  build: ./config/nginx/
+#  ports:
+#    - "80:80"
+#  volumes:
+#    - ./log/nginx:/var/log/nginx
+#  volumes_from:
+#    - web
+#  links:
+#    - web:web
+#
+#redis:
+#  restart: always
+#  image: redis:4.0
+#  ports:
+#    - "6379:6379"
 
 web:
   restart: always
@@ -33,21 +33,21 @@ web:
   volumes:
     - .:/usr/src/app
   links:
-    - redis:redis
-    - celery:celery
+#    - redis:redis
+#    - celery:celery
     - db:db
   command: ./config/uwsgi/init.sh
 
-celery:
-#  restart: always
-  build: .
-  dockerfile: Dockerfile
-  environment:
-    - C_FORCE_ROOT=1
-  command: celery -A app.celery worker -B --loglevel=info --concurrency=4
-  volumes:
-    - .:/usr/src/app
-  env_file: config/env.secret
-  links:
-    - redis:redis
-    - db:db
+#celery:
+##  restart: always
+#  build: .
+#  dockerfile: Dockerfile
+#  environment:
+#    - C_FORCE_ROOT=1
+#  command: celery -A app.celery worker -B --loglevel=info --concurrency=4
+#  volumes:
+#    - .:/usr/src/app
+#  env_file: config/env.secret
+#  links:
+#    - redis:redis
+#    - db:db

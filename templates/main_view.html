@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title id="bearTitle">{{ beat_title }}</title>
+<style>
+div{
+  margin: 40px;
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+    <div>
+        <div>
+            <h2>Most active today</h2>
+            <button type="button" onclick="location.href='/admin/detector'" >Admin</button>
+            <button type="button" onclick="location.href='/?start_task=true'" >Start task</button>
+            <button type="button" onclick="location.href='/csv_data?clear_data=true'" >Clear Data</button>
+            <button type="button" onclick="location.href='/?show_all=true'" >Show All</button>
+            <button type="button" onclick="disableBuzzer()" >Disable Alarm</button>
+            {% if user_id %}
+                <button type="button" onclick="location.href='/csv_data?remove_all_action=true'" >Clean up actions</button>
+                <button type="button" onclick="location.href='/csv_data?force_clean_up=true'" >Clean up and get data</button>
+                <button type="button" onclick="location.href='/csv_data?force_fetch_data=true'" >Fetch up</button>
+            {% endif %}
+        </div>
+        </br>
+        <table id="mostActiveItems">
+              <tr>
+                <th>Name</th>
+                <th>Count</th>
+              </tr>
+            {% for item in most_active_items %}
+              <tr>
+                <td><a href="{{ item.link }}" target="_blank"> {{item.name}} </a></td>
+                <td>{{item.count}}</td>
+             </tr>
+            {% endfor %}
+        </table>
+        <h2>HTML Table with the list of items</h2>
+    </div>
+</body>
+</html>
+
+

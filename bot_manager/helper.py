@@ -1,5 +1,7 @@
 import logging
 from datetime import datetime, timedelta, time
+import glob
+import os
 
 BASE_URL = 'https://finnhub.io/api/v1/stock/candle'
 
@@ -78,3 +80,15 @@ def synchronize_time():
             second=1) - datetime.now()).total_seconds()
     )
     logging.info('after {}'.format(datetime.now()))
+
+
+def setup_dir(ticker):
+    try:
+        files = glob.glob(f'data/{ticker}/*')
+        for f in files:
+            os.remove(f)
+    except FileNotFoundError:
+        pass
+
+    if not os.path.exists(f'data/{ticker}'):
+        os.makedirs(f'data/{ticker}')

@@ -67,7 +67,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'detector',
+    'bot_manager',
 ]
 
 MIDDLEWARE = [
@@ -163,11 +163,6 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = '{}/1'.format(BROKER_URL)
 CELERY_IGNORE_RESULT = True
 CELERY_STORE_ERRORS_EVEN_IF_IGNORED = True
-CELERY_IMPORTS = ('detector.tasks',)
-# CELERYBEAT_SCHEDULE = {
-#     'update_database': {
-#         'task': 'detector.tasks.fetch_stock_data',
-#         'schedule': crontab(minute=(datetime.now().minute + 1) % 60),
-#     },
-# }
+CELERY_IMPORTS = ('bot_manager.tasks',)
+
 
