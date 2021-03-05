@@ -19,6 +19,7 @@ from .models import StockType
 
 class REQUEST_PARAMETERS:
     SYMBOL = 'symbol'
+    INDICATOR = "indicator"
     EXCHANGE = 'exchange'
     TOKEN = 'token'
     API_KEY = 'apikey'
@@ -197,4 +198,80 @@ def get_indicator_data(item, function):
         logging.info('Exception JSON: {}'.format(response.request.url))
     except json.decoder.JSONDecodeError:
         logging.info('Exception JSON: {}'.format(response.request.url))
+    return serialized_response
+
+
+def get_last_two_interval_data_with_indicator(item, indicator):
+    from_date = (datetime.now() + timedelta(minutes=-int(item.interval) * 10)).strftime('%s')
+    response = requests.get(
+        'https://finnhub.io/api/v1/indicator?',
+        {
+            REQUEST_PARAMETERS.SYMBOL: item.symbol,
+            REQUEST_PARAMETERS.RESOLUTION: item.interval,
+            REQUEST_PARAMETERS.FROM: from_date,
+            REQUEST_PARAMETERS.TO: datetime.now().replace(second=1).strftime('%s'),
+            REQUEST_PARAMETERS.INDICATOR: indicator,
+            REQUEST_PARAMETERS.TOKEN: item.token,
+        }
+    )
+    logging.info('get_last_5_minutes_data {}'.format(response.request.url))
+    serialized_response = {}
+    try:
+        serialized_response = response.json()
+    except json.decoder.JSONDecodeError:
+        logging.info('Exception JSONG: {}'.format(response.request.url))
+    return serialized_response
+
+
+def get_historical_idicator_data(item, indicator):
+    to_date = (datetime.now() + timedelta(days=-64)).replace(second=0, hour=1, minute=1).strftime('%s')
+
+    days_from = 65
+
+    response = requests.get(
+        'https://finnhub.io/api/v1/indicator?',
+        {
+            REQUEST_PARAMETERS.SYMBOL: item.symbol,
+            REQUEST_PARAMETERS.RESOLUTION: item.interval,
+            REQUEST_PARAMETERS.FROM: (
+                    datetime.now() + timedelta(days=-days_from)
+            ).replace(hour=2, second=0, minute=1).strftime('%s'),
+            REQUEST_PARAMETERS.TO: to_date,
+            REQUEST_PARAMETERS.INDICATOR: indicator,
+            REQUEST_PARAMETERS.TOKEN: item.token,
+        }
+    )
+    logging.info('get_last_30_days_data {}'.format(response.request.url))
+
+    try:
+        serialized_response = response.json()
+    except json.decoder.JSONDecodeError:
+        logging.info('Exception JSONG: {}'.format(response.request.url))
+
+    return serialized_response
+
+
+def get_data_for_backtest(item, indicator, days_back):
+    to_date = (datetime.now() + timedelta(days=-days_back)).replace(second=0, hour=1, minute=1).strftime('%s')
+
+    response = requests.get(
+        'https://finnhub.io/api/v1/indicator?',
+        {
+            REQUEST_PARAMETERS.SYMBOL: item.symbol,
+            REQUEST_PARAMETERS.RESOLUTION: item.interval,
+            REQUEST_PARAMETERS.FROM: (
+                    datetime.now() + timedelta(days=-days_back - 1)
+            ).replace(hour=2, second=0, minute=1).strftime('%s'),
+            REQUEST_PARAMETERS.TO: to_date,
+            REQUEST_PARAMETERS.INDICATOR: indicator,
+            REQUEST_PARAMETERS.TOKEN: item.token,
+        }
+    )
+    logging.info('get_last_30_days_data {}'.format(response.request.url))
+
+    try:
+        serialized_response = response.json()
+    except json.decoder.JSONDecodeError:
+        logging.info('Exception JSONG: {}'.format(response.request.url))
+
     return serialized_response

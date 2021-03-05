@@ -3,9 +3,9 @@ django-cors-headers==3.2.1
 djangorestframework==3.11.0
 django-filter==2.2.0
 djangorestframework-jwt==1.11.0
-django-redis==4.0.0
 uWSGI==2.0.18
-celery==4.2.1
+celery==4.4.7
+redis==3.5.3
 django-celery-beat==1.1.1
 django-celery-results==1.0.1
 beautifulsoup4==4.8.2
@@ -13,4 +13,5 @@ requests==2.22.0
 psycopg2==2.8.4
 watchdog==0.8.3
 fbchat==1.9.7
-pandas==1.2.3
+pandas==1.1.0
+numpy==1.19

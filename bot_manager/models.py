@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib import admin
-
+import json
 
 class TimeResolutions:
     time_divide_values = {
@@ -16,8 +16,16 @@ class TimeResolutions:
             ('1', '1 Minutes'),
             ('5', '5 Minutes'),
             ('15', '15 Minutes'),
-            ('15', '15 Minutes'),
         )
+
+
+class StockInterval:
+
+    CHOICES = (
+        ('1', '1 Minutes'),
+        ('5', '5 Minutes'),
+        ('15', '15 Minutes'),
+    )
 
 
 class StockType(object):
@@ -32,6 +40,10 @@ class StockType(object):
     )
 
 
+def validate_json(value):
+    json.loads(value)
+
+
 class Strategy(models.Model):
     name = models.CharField(
         max_length=50,
@@ -40,12 +52,18 @@ class Strategy(models.Model):
 
     entry_rule = models.TextField(
         default='',
+        validators=[validate_json],
     )
+
     exit_rule = models.TextField(
         default='',
+        validators=[validate_json],
     )
 
     value = models.IntegerField(default=0)
+
+    backtest = models.BooleanField(default=False)
+    time_from = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -76,6 +94,11 @@ class BotSetting(models.Model):
     )
 
     strategy = models.ForeignKey(Strategy, blank=True, null=True, on_delete=models.DO_NOTHING)
+    interval = models.CharField(
+        max_length=50,
+        default='',
+        blank=True, null=True
+    )
 
     time_from = models.TimeField(blank=True, null=True)
     time_to = models.TimeField(blank=True, null=True)
@@ -90,7 +113,11 @@ class BotSetting(models.Model):
 
 
 class Trade(models.Model):
-    time = models.TimeField(blank=True, null=True)
+    datetime_entry_rule = models.DateTimeField(blank=True, null=True)
+    datetime_entry = models.DateTimeField(blank=True, null=True)
+
+    datetime_exist = models.DateTimeField(blank=True, null=True)
+    datetime_exit_rule = models.DateTimeField(blank=True, null=True)
 
     bot_setting = models.ForeignKey(BotSetting, blank=True, null=True, on_delete=models.DO_NOTHING)
 
@@ -98,10 +125,8 @@ class Trade(models.Model):
 
     price_close = models.FloatField(blank=True, null=True)
 
-    time_resolution = models.CharField(default=1, max_length=2, choices=TimeResolutions.CHOICES)
-
     def __str__(self):
-        return f'{self.time}: {self.symbol} : {self.volume}'
+        return f'Trade {self.bot_setting.name}'
 
 
 admin.site.register(Strategy)

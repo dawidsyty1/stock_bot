@@ -28,11 +28,21 @@ tr:nth-child(even) {
     <div>
         <div>
             <h2>Most active today</h2>
-            <button type="button" onclick="location.href='/admin/detector'" >Admin</button>
-            <button type="button" onclick="location.href='/?start_task=true'" >Start task</button>
-            <button type="button" onclick="location.href='/csv_data?clear_data=true'" >Clear Data</button>
+            <button type="button" onclick="location.href='/admin/'" >Admin</button>
+            <button type="button" onclick="location.href='/?start_task=true'" >Fetch task</button>
+            <button type="button" onclick="location.href='/?parse_task=true'" >Parse task</button>
+            <button type="button" onclick="location.href='/?parse_trade=true'" >Parse Trade</button>
+            <button type="button" onclick="location.href='/?start_backtest=true'" >Start backtest</button>
+            <button type="button" onclick="location.href='/?clear_data=true'" >Clear Data</button>
             <button type="button" onclick="location.href='/?show_all=true'" >Show All</button>
             <button type="button" onclick="disableBuzzer()" >Disable Alarm</button>
+
+            <a href="https://docs.google.com/spreadsheets/d/1ylUvKHVYN2E87WdwIza8ROaCpd48ggEl1k5i5SgA29k/edit#gid=0">
+                URL to Indicator documentation
+            </a>
+            <a href="https://finnhub.io/docs/api/technical-indicator">
+               Finnhub Indicator documentation
+            </a>
             {% if user_id %}
                 <button type="button" onclick="location.href='/csv_data?remove_all_action=true'" >Clean up actions</button>
                 <button type="button" onclick="location.href='/csv_data?force_clean_up=true'" >Clean up and get data</button>
@@ -40,21 +50,76 @@ tr:nth-child(even) {
             {% endif %}
         </div>
         </br>
-        <table id="mostActiveItems">
+        <h2>HTML Table with the list of items</h2>
+        <table id="trade_list">
               <tr>
-                <th>Name</th>
-                <th>Count</th>
+                <th>datetime_entry_rule</th>
+                <th>datetime_entry</th>
+                <th>datetime_exist</th>
+                <th>datetime_exit_rule</th>
+                <th>bot_setting_name</th>
+                <th>bot_setting_symbol</th>
+                <th>price_open</th>
+                <th>price_close</th>
               </tr>
-            {% for item in most_active_items %}
+            {% for trade in trade_list %}
               <tr>
-                <td><a href="{{ item.link }}" target="_blank"> {{item.name}} </a></td>
-                <td>{{item.count}}</td>
+                <td>{{trade.datetime_entry_rule}}</td>
+                <td>{{trade.datetime_entry}}</td>
+                <td>{{trade.datetime_exist}}</td>
+                <td>{{trade.datetime_exit_rule}}</td>
+                <td>{{trade.bot_setting_name}}</td>
+                <td>{{trade.bot_setting_symbol}}</td>
+                <td>{{trade.price_open}}</td>
+                <td>{{trade.price_close}}</td>
              </tr>
             {% endfor %}
         </table>
-        <h2>HTML Table with the list of items</h2>
     </div>
 </body>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+<script language="javascript" type="text/javascript">
+    setInterval(reloadPage, 1000);
+
+    var tableHeaderRowCount = 1;
+    const clearTable = (nameTable) => {
+        var table = document.getElementById(nameTable);
+        var tableHeaderRowCount = 1;
+        var rowCount = table.rows.length;
+        for (var index = tableHeaderRowCount; index < rowCount; index++) {
+            table.deleteRow(tableHeaderRowCount);
+        }
+    }
+
+    const generateTableTradeList = (tradeList) => {
+        var table = document.getElementById("trade_list");
+
+        for (var index = 0; index < tradeList.length; index++) {
+            const row = table.insertRow(index + 1);
+            row.insertCell(0).innerHTML = tradeList[index].datetime_entry_rule;
+            row.insertCell(1).innerHTML = tradeList[index].datetime_entry;
+            row.insertCell(2).innerHTML = tradeList[index].datetime_exist;
+            row.insertCell(3).innerHTML = tradeList[index].datetime_exit_rule;
+            row.insertCell(4).innerHTML = tradeList[index].bot_setting_name;
+            row.insertCell(5).innerHTML = tradeList[index].bot_setting_symbol;
+            row.insertCell(6).innerHTML = tradeList[index].price_open;
+            row.insertCell(6).innerHTML = tradeList[index].price_close;
+        }
+    }
+
+    function reloadPage () {
+           $.ajax({
+            url: '/trade_data',
+            dataType: 'json',
+            success: function (data) {
+                clearTable("trade_list")
+                generateTableTradeList(data.trade_list)
+            }
+          });
+    }
+
+</script>
 </html>
 
 
