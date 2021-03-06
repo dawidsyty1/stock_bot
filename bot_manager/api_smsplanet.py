@@ -1,10 +1,10 @@
 import requests
 import logging
 
-TO = '723893528'
+TO = ''
 TOKEN = 'cb6904bc-0ac5-4354-812e-b7fb0c2c80a9'
 BASE_URL = 'https://api2.smsplanet.pl/sms'
-PASSOWRD = 'Bot12345!'
+PASSOWRD = ''
 
 
 def send_sms(bear):
