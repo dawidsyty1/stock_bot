@@ -1,31 +1,19 @@
 import talib
-import pandas as pd
-from utility.statistics import percentage
+from utility.statistics import is_growing
+from utility.ta_lib import ema
 from fetchers.finnhub import fetch_dataframe
 
 
 async def ema_crossover(ticker):
-    df = fetch_dataframe(ticker, timeframe=60)
-    df['ema'] = talib.EMA(df.c, timeperiod=200)
+    timeperiod = 200
 
-    df = df.dropna()
-    df60 = df.reset_index()
+    stocks60 = fetch_dataframe(ticker, timeframe='60')
+    stocks60 = ema(stocks60, timeperiod)
 
-    df = fetch_dataframe(ticker, timeframe=60)
-    df['ema'] = talib.EMA(df.c, timeperiod=200)
-    df['ema_f'] = talib.EMA(df.c, timeperiod=20)
-    df = df.dropna()
-    df5 = df.reset_index()
-    array = df60.ema.to_numpy()
+    if is_growing(stocks60.ema.to_numpy()):
+        stocks = fetch_dataframe(ticker, timeframe='5')
+        stocks = ema(stocks, timeperiod)
+        stocks = ema(stocks, 20, name='ema_f')
 
-    if percentage(array[0], array[-1]) < 99.5:
-        array = df5.ema.to_numpy()
-        before_ema = array[-5]
-        last_ema = array[-1]
-
-        array = df5.ema_f.to_numpy()
-        before_ema_f = array[-5]
-        last_ema_f = array[-1]
-
-        if before_ema > before_ema_f and last_ema < last_ema_f:
-            print('value')
+        # if before_ema > before_ema_f and last_ema < last_ema_f:
+        #     print('value')
