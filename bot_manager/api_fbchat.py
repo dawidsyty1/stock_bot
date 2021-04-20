@@ -1,16 +1,18 @@
 from fbchat import Client
 import logging
 from fbchat.models import *
+import os
 
-USER = '+48723893528'
-PASSOWRD = 'Bot12345!'
+
+USER = os.environ.get("USER_FB", '')
+PASSWORD = os.environ.get("PASSWORD_FB", '')
 
 
 def send_message(bear, item, current_price):
     try:
-        client = Client(USER, PASSOWRD)
+        client = Client(USER, PASSWORD)
         if not client.isLoggedIn():
-            client.login(USER, PASSOWRD)
+            client.login(USER, PASSWORD)
         current_price = current_price if current_price is not None else ''
 
         client.send(
