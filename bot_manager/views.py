@@ -2,11 +2,12 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import JsonResponse
-from .fetcher import grab_data
-from .parser import parse_item, parse_trade
+from fetchers.fetcher import grab_data
+from strategies.parser import parse_item, parse_trade
 from .models import BotSetting, Trade
-from .tasks import task_make_backtest
+# from .tasks import task_make_backtest
 from django.shortcuts import redirect
+
 
 class MainView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -33,7 +34,7 @@ class MainView(APIView):
 
         start_backtest = request.GET.get('start_backtest', 'false')
         if start_backtest == 'true':
-            task_make_backtest.apply_async()
+            # task_make_backtest.apply_async()
             return redirect('/')
 
         clear_data = request.GET.get('clear_data', 'false')

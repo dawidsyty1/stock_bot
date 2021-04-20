@@ -2,8 +2,7 @@ import json
 import logging
 import requests
 from datetime import datetime, timedelta
-from .const import (
-    BASE_URL_QUERY,
+from config.const import (
     BASE_URL_CANDLE,
     BASE_URL_QUOTE,
     HISTORICAL_DATA,
@@ -14,7 +13,7 @@ from .const import (
     DETECTOR_FOREX_SYMBOLS,
     DETECTOR_CRYPTO_SYMBOLS
 )
-from .models import StockType
+from bot_manager.models import StockType
 
 
 class REQUEST_PARAMETERS:

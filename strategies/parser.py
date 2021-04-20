@@ -1,9 +1,9 @@
 import json
 import pandas as pd
 from datetime import datetime
-from .helper import indicators
+from bot_manager.helper import indicators
 import logging
-from .models import Trade
+from bot_manager.models import Trade
 import numpy as np
 
 

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib import admin
 import json
 
+
 class TimeResolutions:
     time_divide_values = {
         '1': 15,

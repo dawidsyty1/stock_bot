@@ -17,7 +17,7 @@ nginx:
   links:
     - web:web
 
-redis:
+redis_cache:
   restart: always
   image: redis:6.0.5-alpine
   ports:
@@ -33,7 +33,7 @@ web:
   volumes:
     - .:/usr/src/app
   links:
-    - redis:redis
+    - redis_cache:redis_cache
     - celery:celery
     - db:db
   command: ./config/uwsgi/init.sh
@@ -49,5 +49,5 @@ celery:
     - .:/usr/src/app
   env_file: config/env.secret
   links:
-    - redis:redis
+    - redis_cache:redis_cache
     - db:db
