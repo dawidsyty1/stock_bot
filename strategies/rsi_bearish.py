@@ -6,16 +6,15 @@ from utility.ta_lib import ema, rsi
 from fetchers.finnhub import fetch_dataframe
 
 
-def is_reverese_rsi(dataframe):
+def is_bearish_divergence(dataframe):
     try:
-        data = dataframe.rsi.to_numpy()
-        close = dataframe.c.to_numpy()
-        minimums = argrelextrema(data, np.less)
-        minimums_price = argrelextrema(close, np.less)
-        values_price = [close[value] for value in minimums_price[0]]
-        values = [data[value] for value in minimums[0]]
-        if len(values) > 7 and min(values) < 35:
-            rsi_minimums = np.array(values, dtype='f8')
+        rsi_data = dataframe.rsi.to_numpy()
+        close_data = dataframe.c.to_numpy()
+        values_price = [close_data[value] for value in argrelextrema(close_data, np.less)[0]]
+        values_rsi = [rsi_data[value] for value in argrelextrema(rsi_data, np.less)[0]]
+
+        if len(values_rsi) > 7 and min(values_rsi) < 35:
+            rsi_minimums = np.array(values_rsi, dtype='f8')
             if len(rsi_minimums) > 7:
                 rsi_minimums = talib.SMA(rsi_minimums, int(len(rsi_minimums) - 5))
                 rsi_minimums = rsi_minimums[~np.isnan(rsi_minimums)]
@@ -41,7 +40,6 @@ async def rsi_bearish(ticker):
 
     if is_growing(stocks60.ema.to_numpy()):
         stocks = fetch_dataframe(ticker, timeframe='5')
-        stocks = ema(stocks, timeperiod)
         stocks = rsi(stocks, timeperiod)
-        if is_reverese_rsi(stocks):
+        if is_bearish_divergence(stocks):
             print('test')

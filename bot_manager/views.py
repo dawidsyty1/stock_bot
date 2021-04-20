@@ -3,9 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from fetchers.fetcher import grab_data
-from strategies.parser import parse_item, parse_trade
 from .models import BotSetting, Trade
-# from .tasks import task_make_backtest
 from django.shortcuts import redirect
 
 
@@ -22,19 +20,14 @@ class MainView(APIView):
 
         parse_task = request.GET.get('parse_task', 'false')
         if parse_task == 'true':
-            for item in BotSetting.objects.filter(enable=True):
-                parse_item(item)
             return redirect('/')
 
         p_trade = request.GET.get('parse_trade', 'false')
         if p_trade == 'true':
-            for item in Trade.objects.all():
-                parse_trade(item)
             return redirect('/')
 
         start_backtest = request.GET.get('start_backtest', 'false')
         if start_backtest == 'true':
-            # task_make_backtest.apply_async()
             return redirect('/')
 
         clear_data = request.GET.get('clear_data', 'false')
